@@ -1,17 +1,16 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
+import Colors from '../constants/Colors';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import Subcategory from '../components/Subcategory';
 
-import Test from '../components/Test'
-
-export default function TabTwoScreen() {
-    return (
-      <View>
-        <Text>Tab two</Text>
-      </View>
-    );
+export default function SubcategoryScreen() {
+  return (
+    <View style={styles.container}>
+      <Subcategory />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
