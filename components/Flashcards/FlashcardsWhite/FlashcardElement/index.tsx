@@ -5,42 +5,52 @@ import * as SQLite from 'expo-sqlite';
 import styles from './styles';
 import { Image } from 'react-native-animatable';
 import FlashcardWhite from '..';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { getFlashcards, updateFlashcardRemembered } from '../../../../adapters/sql'
 
 export type FlashcardElementProps = {
     setProgressValue: any,
     setLearning: any,
     name: string,
+    id: number
+}
+
+export type FlashcardStateProps = {
+    id: number,
+    remote_id: number,
+    word: string,
+    translation: string,
+    remembered: number
 }
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 
-const FlashcardElement = ({setProgressValue, setLearning, name}:FlashcardElementProps) => {
+const FlashcardElement = ({setProgressValue, setLearning, name, id}:FlashcardElementProps) => {
     const [index, setIndex] = useState(0);
-    const [currentFlashcard, setCurrentFlashcard] = useState([])
-    const [finishFlashcard, setFinishFlashcard] = useState([])
+    const [currentFlashcard, setCurrentFlashcard] = useState<FlashcardStateProps[]>([]);
+    const [finishFlashcard, setFinishFlashcard] = useState([]);
     
-    const db = SQLite.openDatabase('germanpolish.db');
+    const db = SQLite.openDatabase('linguesia.db');
 
-    //On first load create a new table if doesn't exist
+    // oquery database and load into state
+    const route = useRoute();
     useEffect(() => {
-        const tableName = name;
-        db.transaction((tx) => {
-            tx.executeSql("SELECT * FROM "+tableName+" LIMIT 20", [], (tx, results) => {
-                results.rows._array.map((item) => {
-                    setCurrentFlashcard(currentFlashcard => [...currentFlashcard, {
-                        id: currentFlashcard.length,
-                        word: item.flashcard_word,
-                        translation: item.flashcard_translation,
-                        remembered: item.flashcard_remembered,
-                        }])
-                })
-            
-                setLearning(results.rows.length);
-            });
-        });
+        // get flashcards from sqlite and add to state
+        getFlashcards(db, id, (res:any) => {
+            res.rows._array.map((item:any) => {
+                setCurrentFlashcard(currentFlashcard => [...currentFlashcard, {
+                    id: currentFlashcard.length,
+                    remote_id: item.remote_id,
+                    word: `${item.german_article} ${item.german}`,
+                    translation: item.polish,
+                    remembered: item.remembered
+                    }])
+            })
+        
+            setLearning(res.rows.length);
+        })
       }, []);
 
     const renderFlashcards = () => {
@@ -132,6 +142,8 @@ const FlashcardElement = ({setProgressValue, setLearning, name}:FlashcardElement
         outputRange: [0, 0, 1]
     }) 
 
+
+    // handle press (touch)
     const onPress = () => {
         if (flipValue._value == 0) {
             Animated.timing(flipValue, {
@@ -151,12 +163,13 @@ const FlashcardElement = ({setProgressValue, setLearning, name}:FlashcardElement
 
     const navigation = useNavigation();
 
+    // when cards run out
     const onEnd = () => {
         
-        navigation.navigate('NotFound')
+        navigation.navigate('StartFinish');
     }
 
-
+    // handle gestures
     const panResponder = useMemo(
         () =>
         PanResponder.create({
@@ -173,6 +186,17 @@ const FlashcardElement = ({setProgressValue, setLearning, name}:FlashcardElement
                 ),
                 onPanResponderRelease: (...args) => {
                     if (args[1].vx > 1) {
+                        // swipe to right side
+
+                        // remembered ++ for the current card
+                        currentFlashcard[index]['remembered'] = currentFlashcard[index]['remembered'] + 1;
+                        updateFlashcardRemembered(
+                            db, 
+                            name, 
+                            currentFlashcard[index]['remote_id'], 
+                            currentFlashcard[index]['remembered']
+                        );
+                        // updateRemembered(currentFlashcard[index]['remembered'], currentFlashcard[index]['sql_id']);
                         Animated.spring(pan, {
                             toValue: { x: width+100, y: 0 },
                             useNativeDriver: false,
@@ -188,13 +212,16 @@ const FlashcardElement = ({setProgressValue, setLearning, name}:FlashcardElement
                             setIndex(index+1)
                             pan.x.setValue(0)
                             pan.y.setValue(0)
-                            setProgressValue(-320 + index * (320/(currentFlashcard.length-1)))
+                            // handle progress bar
+                            setProgressValue(-280 + index * (280/(currentFlashcard.length-1)));
+                            // if no cards left
                             if (index >= currentFlashcard.length-1) {
                                 onEnd()
                             }
                         })
                     }
                     else if (args[1].vx < -1) {
+                        // swipe to left side
                         Animated.spring(pan, {
                             toValue: { x: -width-100, y: 0 },
                             useNativeDriver: false,
@@ -210,9 +237,11 @@ const FlashcardElement = ({setProgressValue, setLearning, name}:FlashcardElement
                         })
                     }
                     else if (args[1].dx == 0 && args[1].dy == 0) {
+                        // activate press
                         onPress()
                     }
                     else {
+                        // return to original positon
                         Animated.spring(pan, {
                             toValue: { x: 0, y: 0 },
                             useNativeDriver: false

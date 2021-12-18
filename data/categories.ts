@@ -44,8 +44,8 @@ const categories = [
         id: '2',
         title: 'Rodzajniki',
         subtitle: 'die der das',
-        color: Colors.green,
-        images: require('../assets/images/german.png'),
+        color: Colors.blue,
+        images: require('../assets/images/translate.png'),
         subcategory: [
             {
                 id: '1',
@@ -81,10 +81,10 @@ const categories = [
     },
     {
         id: '3',
-        title: 'Fragmenty',
-        subtitle: 'Odkryj fragmenty tekstów',
-        color: Colors.blue,
-        images: require('../assets/images/openbook.png'),
+        title: 'Nieregularne',
+        subtitle: 'Formy czasowników nieregularnych',
+        color: Colors.green,
+        images: require('../assets/images/class.png'),
         subcategory: [
             {
                 id: '1',

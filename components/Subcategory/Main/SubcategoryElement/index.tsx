@@ -11,9 +11,10 @@ import styles from './styles';
 export type SubcategoryElementProps = {
     category: SubcategoryType,
     color: CategoryType,
+    animate?: boolean,
 }
 
-const SubcategoryElement = ({ category, color }: SubcategoryElementProps ) => {
+const SubcategoryElement = ({ category, color, animate = true }: SubcategoryElementProps ) => {
 
     const navigation = useNavigation();
 
@@ -23,9 +24,11 @@ const SubcategoryElement = ({ category, color }: SubcategoryElementProps ) => {
     
     var id = parseInt(category.id, 10);
 
+    const animationType = animate ? 'fadeInUp' : 'fadeIn';
+
     return (
         <Animatable.View
-         animation='fadeInUp'
+         animation= {animationType}
          delay={100 + id * 50}
          useNativeDriver={true}
         >

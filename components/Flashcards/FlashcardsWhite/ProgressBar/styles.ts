@@ -15,7 +15,7 @@ const styles = StyleSheet.create ({
     },
     progress: {
         height: '100%',
-        width: '100%',
+        width: '105%',
         borderRadius: 40,
     },
 })

@@ -1,23 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as SQLite from 'expo-sqlite';
 import styles from './styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 
-import categories from '../../data/categories';
 import Colors, { isDark } from '../../constants/Colors';
 import SubcategoryElement from '../Subcategory/Main/SubcategoryElement';
 import ProgressBar from '../Flashcards/FlashcardsWhite/ProgressBar';
 import Counter from '../Flashcards/FlashcardsWhite/Counter';
-import { color } from 'react-native-reanimated';
+import { numOfRemembered, resetLevelProgress } from '../../adapters/sql';
 
 
 
 const Subcategory = () => {
 
+    const db = SQLite.openDatabase('linguesia.db');
+    const [toLearn, setToLearn] = useState(0);
+    const [learning, setLearning] = useState(0);
+    const [learnt, setLearnt] = useState(0);
+
+    const [progressValue, setProgressValue] = useState(-320);
+
     const route = useRoute();
+    const main = route.params.main;
+    const sub = route.params.sub;
+
+    // refresh screen on goBack()
+    const isFocused = useIsFocused();
 
     const navigation = useNavigation();
 
@@ -25,39 +36,73 @@ const Subcategory = () => {
         navigation.goBack();
     }
 
+    const tableName = sub.title.replace(/\s/g, '').toLowerCase();
+    const updateCounters = () => {
+        numOfRemembered(db, tableName, 0, sub.id).then((res) => {
+            setToLearn(res);
+            
+        }, () => {
+            alert('poziom nie istnieje');
+        });
+
+        numOfRemembered(db, tableName, 1, sub.id).then((res) => {
+            setLearning(res);
+            
+        }, () => {
+            // nothing
+        });
+
+        numOfRemembered(db, tableName, 2, sub.id).then((res) => {
+            setLearnt(res);
+        }, () => {
+            // nothing
+        });
+        
+    }
+    
+    useEffect(() => {
+        updateCounters();
+    }, [isFocused]);
+
+    useEffect(() => {
+        setProgressValue(-320 + (learnt * 0.85 + learning * 0.3) * (320/(toLearn+learning+learnt-1)));
+    }, [learning, learnt])
+
     const onStart = () => {
         if (main.id == 1) {
-            navigation.navigate('Flashcards', {main: main, sub: sub});
+            // check if there are any more flashcards to learn
+            if (toLearn != 0 || learning != 0) {
+                // navigate to flashcards
+                navigation.navigate('Flashcards', {main: main, sub: sub});
+            }
+            else {
+                // ask user if they wanna reset their progress
+                Alert.alert(
+                    "Wyzeruj postęp?",
+                    "Wszystkie słowa zostały już nauczone, czy chcesz wyzerować postęp dla tego poziomu?",
+                    [
+                      // The "Yes" button
+                      {
+                        text: "Tak",
+                        onPress: () => {
+                          resetLevelProgress(db, tableName);
+                          updateCounters();
+                        },
+                      },
+                      // The "No" button
+                      {
+                        text: "Nie",
+                      },
+                    ]
+                  );
+            }
+            
         }
         else {
             alert('navigate to word genders')
         }
-        
+    
     }
-
-    const db = SQLite.openDatabase('germanpolish.db');
-    const [toLearn, setToLearn] = useState(0);
-    const [learning, setLearning] = useState(0);
-    const [learnt, setLearnt] = useState(0);
-
-    useEffect(() => {
-        const tableName = 'owoceiwarzywa';
-        db.transaction((tx) => {
-            tx.executeSql("SELECT * FROM "+tableName+" WHERE flashcard_remembered = 0", [], (tx, results) => {
-                setToLearn(results.rows.length);
-            });
-            tx.executeSql("SELECT * FROM "+tableName+" WHERE flashcard_remembered = 1", [], (tx, results) => {
-                setLearning(results.rows.length);
-            });
-            tx.executeSql("SELECT * FROM "+tableName+" WHERE flashcard_remembered = 2", [], (tx, results) => {
-                setLearnt(results.rows.length);
-            });
-        });
-
-      }, []);
-
-    const main = route.params.main;
-    const sub = route.params.sub;
 
     const background = isDark ? Colors.theme.background : main.color.main;
     const text = isDark ? main.color.main : Colors.dark.text;
@@ -72,7 +117,7 @@ const Subcategory = () => {
                 <Ionicons name="chevron-back" size={40} color="white" />
             </TouchableOpacity>
            <View style={styles.main}>
-            <SubcategoryElement category={sub} color={main} />
+            <SubcategoryElement category={sub} color={main} animate={false} />
             
             <View style={styles.counterContainer}>
                 <View style={[styles.counterBackground, {backgroundColor: main.color.accent}]}>
@@ -85,7 +130,7 @@ const Subcategory = () => {
                     <Counter title={'Nauczone'} color={main.color.light} counter={learnt}/>
                 </View>
             </View>
-            <ProgressBar progressValue={-300+10} color={main.color.main}/>
+            <ProgressBar progressValue={progressValue} color={main.color.main}/>
             <View style={styles.adContainer}>
                 <Image 
                     source={require('../../assets/images/ad.png')}
@@ -102,7 +147,7 @@ const Subcategory = () => {
              activeOpacity={0.8}
              onPress={onStart}
             >
-                <Text style={[styles.text, {color: main.color.main}]}>Rozpocznij</Text>
+                <Text style={[styles.text, {color: main.color.main}]}>{learning == 0 && learning == 0 ? 'Rozpocznij' : 'Kontynuuj'}</Text>
             </TouchableOpacity>
             </View>
            </View> 

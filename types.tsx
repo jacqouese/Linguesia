@@ -6,19 +6,7 @@ export type RootStackParamList = {
   Flashcards: undefined;
   Settings: undefined;
   NotFound: undefined;
-};
-
-export type BottomTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
-};
-
-export type TabOneParamList = {
-  TabOneScreen: undefined;
-};
-
-export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+  Login: undefined;
 };
 
 export type CategoryType = {

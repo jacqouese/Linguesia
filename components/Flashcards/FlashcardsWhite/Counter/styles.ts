@@ -7,7 +7,7 @@ const styles = StyleSheet.create ({
         justifyContent: 'center'
     },
     title: {
-        fontWeight: 'bold',
+        fontWeight: 'normal',
         marginBottom: 5,
     },
     counter: {

@@ -10,8 +10,6 @@ const styles = StyleSheet.create ({
         borderRadius: 30,
         marginBottom: 12,
         backgroundColor: Colors.theme.light,
-        borderWidth: 2,
-        borderColor: Colors.theme.accent,
     },
     left: {
         height: '90%',

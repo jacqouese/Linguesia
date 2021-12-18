@@ -9,9 +9,11 @@ import SubcategoryScreen from '../screens/SubcategoryScreen';
 import StartFinishScreen from '../screens/StartFinishScreen';
 import FlashcardsScreen from '../screens/FlashcardsScreen';
 import { RootStackParamList } from '../types';
-import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import SettingsScreen from '../screens/SettingsScreen';
+
+import Login from '../screens/LoginScreen';
+import LoginScreen from '../screens/LoginScreen';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -29,16 +31,26 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 // Read more here: https://reactnavigation.org/docs/modal
 const Stack = createStackNavigator<RootStackParamList>();
 
+// temporary sign in check
+
+const isSignedIn = true;
+
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false, cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS }}>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Subcategory" component={SubcategoryScreen} />
-      <Stack.Screen name="StartFinish" component={StartFinishScreen} />
-      <Stack.Screen name="Flashcards" component={FlashcardsScreen} options={{gestureEnabled: false, cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid}}/>
-      <Stack.Screen name="Settings" component={SettingsScreen} />
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      {isSignedIn ? (
+        <>
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Subcategory" component={SubcategoryScreen} />
+          <Stack.Screen name="StartFinish" component={StartFinishScreen} />
+          <Stack.Screen name="Flashcards" component={FlashcardsScreen} options={{gestureEnabled: false, cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid}}/>
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+        </>
+      ): (
+        <Stack.Screen name="Login" component={LoginScreen} />
+      )}
+      
     </Stack.Navigator>
   );
 }

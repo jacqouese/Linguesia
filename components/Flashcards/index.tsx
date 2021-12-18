@@ -23,7 +23,7 @@ const Flashcards = () => {
     
     setTimeout(()=>{
         setReady(true)
-    }, 2500)
+    }, 1500)
 
     const color = isDark ? 'white' : 'black';
 
@@ -41,7 +41,7 @@ const Flashcards = () => {
             >
                 <Ionicons name="close-outline" size={40} color={color} />
             </TouchableOpacity>
-            <FlashcardWhite name={title}/>
+            <FlashcardWhite name={title} id={sub.id}/>
         </View>
     )
 }

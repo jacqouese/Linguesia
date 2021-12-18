@@ -8,25 +8,32 @@ function index() {
     const cardOpacity = new Animated.Value(1);  
     const scale = new Animated.Value(1);
 
+    // background animation
     Animated.timing(time, {
         toValue: 0,
-        delay: 1500,
+        delay: 600,
         duration: 500,
         useNativeDriver: false,
     }).start();
 
     Animated.timing(cardOpacity, {
         toValue: 0,
-        delay: 2000,
-        duration: 500,
+        delay: 900,
+        duration: 700,
         useNativeDriver: false,
     }).start();
 
+    // increase card scale
     Animated.spring(scale, {
         toValue: 15,
-        delay: 1000,
+        delay: 500,
         useNativeDriver: false,
-    }).start();
+    }).start(() => {
+        Animated.spring(scale, {
+            toValue: 14,
+            useNativeDriver: false,
+        }).start()
+    });
 
     return (
         <>

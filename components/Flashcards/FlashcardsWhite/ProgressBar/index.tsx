@@ -10,6 +10,10 @@ export type ProgressBarProps = {
 }
 
 const ProgressBar = ({progressValue, color, absolute}:ProgressBarProps) => {
+    // error handling
+    if (isNaN(progressValue)) {
+        progressValue = -300;
+    }
 
     const progress = useState(new Animated.ValueXY({ x: progressValue, y: 0}))[0]
 
