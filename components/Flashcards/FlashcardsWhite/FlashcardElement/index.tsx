@@ -34,7 +34,7 @@ const FlashcardElement = ({setProgressValue, setLearning, name, id}:FlashcardEle
     
     const db = SQLite.openDatabase('linguesia.db');
 
-    // oquery database and load into state
+    // query database and load into state
     const route = useRoute();
     useEffect(() => {
         // get flashcards from sqlite and add to state

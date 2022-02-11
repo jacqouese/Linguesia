@@ -46,12 +46,11 @@ export const getFlashcards = (dbObject:SQLite.WebSQLDatabase, id:number, callbac
 
 // get from server
 
-export const updateData = (dbObject:SQLite.WebSQLDatabase, table:string, lastUpdate:string, dataObject:Array) => {
-    // insert levels
+export const updateDataFlashcards = (dbObject:SQLite.WebSQLDatabase, table:string, lastUpdate:string, dataObject:Array<any>) => {
     dbObject.transaction((tx) => {
        dataObject.forEach(data => {
             tx.executeSql(`INSERT OR IGNORE INTO flashcards(flashcard_levels_id, remote_id, german, german_article, english, polish, image) values (?, ?, ?, ?, ?, ?, ?)`, 
-            [data.flashcard_levels_id, data.id, data.german, data.german_article, data.english, data.polish, ''], 
+            [data.flashcard_levels_id, data.id, data.german, data.german_article, data.english, data.polish, ''],  
             (tx, result) => {
                 // prepare progress table
                 tx.executeSql(`INSERT OR IGNORE INTO flashcard_progress(remote_id, level_type) values (?, ?)`, [data.id, 0], () => console.log('success'))
@@ -64,9 +63,33 @@ export const updateData = (dbObject:SQLite.WebSQLDatabase, table:string, lastUpd
 
 }
 
+export const updateDataFlashcardLevels = (dbObject:SQLite.WebSQLDatabase, lastUpdate:string, dataObject:Array<any>) => {
+    dbObject.transaction((tx) => {
+       dataObject.forEach(data => {
+            tx.executeSql(
+            `INSERT OR IGNORE INTO flashcard_levels(title_english, subtitle_english, title_polish, subtitle_polish, imgage) values (?, ?, ?, ?, ?)`,
+            [data.title, data.subtitle_english, data.title_polish, data.subtitle_polish, data.image],
+            );
+       })
+    });
+
+}
+
+export const updateDataFlashcardCategory = (dbObject:SQLite.WebSQLDatabase, lastUpdate:string, dataObject:Array<any>) => {
+    dbObject.transaction((tx) => {
+       dataObject.forEach(data => {
+            tx.executeSql(
+            `INSERT OR IGNORE INTO flashcard_category(main_id, flashcard_levels_id) values (?, ?)`,
+            [data.main_id, data.flashcard_levels_id],
+            );
+       })
+    });
+
+}
+
 export const showFlashcards = (dbObject:SQLite.WebSQLDatabase) => {
     dbObject.transaction((tx) => {
-        tx.executeSql(`SELECT * FROM owoceiwarzywa`, [], (tx, result) => {
+        tx.executeSql(`SELECT * FROM flashcard_levels`, [], (tx, result) => {
             console.log(result.rows._array)
         }, (t, err) => {
             console.log(err)

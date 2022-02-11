@@ -5,7 +5,7 @@ import * as SQLite from 'expo-sqlite';
 import { Asset } from 'expo-asset';
 import axios from 'axios';
 import { Text, View } from '../components/Themed';
-import { showFlashcards, updateData, showTables } from '../adapters/sql';
+import { showFlashcards, showTables, updateDataFlashcardLevels, updateDataFlashcards } from '../adapters/sql';
 
 export default function SettingsScreen() {
 
@@ -51,8 +51,12 @@ export default function SettingsScreen() {
   const dbNew = SQLite.openDatabase('linguesia.db')
 
   const onQuery = () => {
-    axios.get(`http://192.168.1.47:8001/api/flashcards`).then((res) => {
-      updateData(dbNew, 'flashcards', '2021', res.data)
+    axios.get(`http://192.168.1.47:8000/api/flashcards`).then((res) => {
+      updateDataFlashcards(dbNew, 'flashcards', '2021', res.data);
+
+      axios.get(`http://192.168.1.47:8000/api/levels`).then((res) => {
+        updateDataFlashcardLevels(dbNew, '2021', res.data);
+      })
     }, (err) => {
       console.log(err)
     })
@@ -60,12 +64,6 @@ export default function SettingsScreen() {
 
   return (
     <View style={styles.container}>
-      <Button
-        onPress={onPress}
-        title="Load DB to storage"
-        color="#FFF"
-      />
-      <Text>------------</Text>
       <Button
         onPress={onNewDb}
         title="Load DB to storage"
@@ -80,7 +78,13 @@ export default function SettingsScreen() {
       <Text>------------</Text>
       <Button
         onPress={() => showTables(dbNew)}
-        title="console log flashcards"
+        title="console.log flashcards"
+        color="#FFF"
+      />
+      <Text>------------</Text>
+      <Button
+        onPress={() => showFlashcards(dbNew)}
+        title="console.log flashcard_levels"
         color="#FFF"
       />
     </View>

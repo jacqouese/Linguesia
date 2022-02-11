@@ -16,7 +16,7 @@ import { numOfRemembered, resetLevelProgress } from '../../adapters/sql';
 
 const Subcategory = () => {
 
-    const db = SQLite.openDatabase('linguesia.db');
+    
     const [toLearn, setToLearn] = useState(0);
     const [learning, setLearning] = useState(0);
     const [learnt, setLearnt] = useState(0);
@@ -36,7 +36,9 @@ const Subcategory = () => {
         navigation.goBack();
     }
 
+    const db = SQLite.openDatabase('linguesia.db');
     const tableName = sub.title.replace(/\s/g, '').toLowerCase();
+    console.log(sub)
     const updateCounters = () => {
         numOfRemembered(db, tableName, 0, sub.id).then((res) => {
             setToLearn(res);
@@ -66,6 +68,7 @@ const Subcategory = () => {
 
     useEffect(() => {
         setProgressValue(-320 + (learnt * 0.85 + learning * 0.3) * (320/(toLearn+learning+learnt-1)));
+        console.log(sub)
     }, [learning, learnt])
 
     const onStart = () => {
@@ -98,8 +101,11 @@ const Subcategory = () => {
             }
             
         }
-        else {
-            alert('navigate to word genders')
+        else if (main.id == 2) {
+            alert('navigate to word genders');
+        }
+        else if (main.id == 3) {
+            alert('navigate to irregular');
         }
     
     }
