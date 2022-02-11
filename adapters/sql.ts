@@ -12,7 +12,7 @@ export const updateFlashcardRemembered = (dbObject:SQLite.WebSQLDatabase, table:
 }
 
 // query number of flashcard_remembered
-export const numOfRemembered = async (dbObject:SQLite.WebSQLDatabase, table:string, rememberedValue:number, id:number):Promise<number> => {
+export const numOfRemembered = async (dbObject:SQLite.WebSQLDatabase, rememberedValue:number, id:number):Promise<number> => {
     return new Promise((resolve, reject) => {
         dbObject.transaction((tx) => {
             tx.executeSql(`SELECT count(flashcard_progress.remembered) FROM flashcard_progress INNER JOIN flashcards ON flashcard_progress.remote_id = flashcards.remote_id WHERE flashcard_progress.remembered = ? AND flashcards.flashcard_levels_id = ?`, [rememberedValue, id], (tx, result) => {
@@ -44,6 +44,14 @@ export const getFlashcards = (dbObject:SQLite.WebSQLDatabase, id:number, callbac
     });
 }
 
+export const getFlashcardLevels = (dbObject:SQLite.WebSQLDatabase, callback:Function) => {
+    dbObject.transaction((tx) => {
+        tx.executeSql(`SELECT * FROM flashcard_levels`, [], (tx, results) => {
+            typeof callback === 'function' && callback(results);
+        });
+    });
+}
+
 // get from server
 
 export const updateDataFlashcards = (dbObject:SQLite.WebSQLDatabase, table:string, lastUpdate:string, dataObject:Array<any>) => {
@@ -67,8 +75,8 @@ export const updateDataFlashcardLevels = (dbObject:SQLite.WebSQLDatabase, lastUp
     dbObject.transaction((tx) => {
        dataObject.forEach(data => {
             tx.executeSql(
-            `INSERT OR IGNORE INTO flashcard_levels(title_english, subtitle_english, title_polish, subtitle_polish, imgage) values (?, ?, ?, ?, ?)`,
-            [data.title, data.subtitle_english, data.title_polish, data.subtitle_polish, data.image],
+            `INSERT OR IGNORE INTO flashcard_levels(remote_id, title_english, subtitle_english, title_polish, subtitle_polish, image) values (?, ?, ?, ?, ?, ?)`,
+            [data.id, data.title, data.subtitle_english, data.title_polish, data.subtitle_polish, data.image],
             );
        })
     });

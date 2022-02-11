@@ -14,7 +14,7 @@ Learn German with flashcards and other memorization methods
 
 - React Native with TypeScript
 - Animations with React Native Animated and react-native-animatable
-- SQLite and AsyncStorage for on-device storage
+- SQLite and AsyncStorage for on-device storage (SQLite for faster loading and limiting repeating API queries)
 - <a href="https://github.com/jacqouese/Linguesia-server">Laravel api for storing words and pushing new content to user devices</a>
 
 ## Overview

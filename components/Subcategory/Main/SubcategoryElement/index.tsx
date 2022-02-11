@@ -21,6 +21,8 @@ const SubcategoryElement = ({ category, color, animate = true }: SubcategoryElem
     const onPress = () => {
         navigation.navigate('StartFinish', {main: color, sub: category});
     }
+
+    const image = `http://192.168.1.47:8000/images/${category.image}`
     
     var id = parseInt(category.id, 10);
 
@@ -39,7 +41,9 @@ const SubcategoryElement = ({ category, color, animate = true }: SubcategoryElem
         >
             <View style={[styles.left, {backgroundColor: color.color.accent}]}>
             <Image 
-                source={category.image}
+                source={{
+                    uri: image,
+                  }}
                 style={{
                 position: 'absolute',
                 right: 15,
@@ -51,8 +55,8 @@ const SubcategoryElement = ({ category, color, animate = true }: SubcategoryElem
                 />
             </View>
             <View style={styles.textContainer}>
-                <Text style={styles.title}>{category.title}</Text>
-                <Text style={styles.subtitle}>{category.subtitle}</Text>
+                <Text style={styles.title}>{category.title_polish}</Text>
+                <Text style={styles.subtitle}>{category.subtitle_polish}</Text>
             </View>
             <View style={{position: 'absolute', right: 20, width: 40, height: 40, borderRadius: 20, backgroundColor: color.color.accent}} />
         </TouchableOpacity>

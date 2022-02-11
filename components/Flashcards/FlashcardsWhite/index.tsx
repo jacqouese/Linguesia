@@ -21,18 +21,17 @@ const FlashcardWhite = ({name, id}:FlashcardWhiteProps) => {
 
     const db = SQLite.openDatabase('linguesia.db');
 
-    const tableName = name;
 
     useEffect(() => {
-        numOfRemembered(db, tableName, 0, id).then((res) => {
+        numOfRemembered(db, 0, id).then((res) => {
             setToLearn(res);
         });
 
-        numOfRemembered(db, tableName, 1, id).then((res) => {
+        numOfRemembered(db, 1, id).then((res) => {
             setLearning(res);
         });
 
-        numOfRemembered(db, tableName, 2, id).then((res) => {
+        numOfRemembered(db, 2, id).then((res) => {
             setLearnt(res);
         });
     });
