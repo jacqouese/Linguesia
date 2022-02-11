@@ -51,7 +51,7 @@ export default function SettingsScreen() {
   const dbNew = SQLite.openDatabase('linguesia.db')
 
   const onQuery = () => {
-    axios.get(`http://192.168.1.4:8000/api/flashcards`).then((res) => {
+    axios.get(`http://192.168.1.47:8001/api/flashcards`).then((res) => {
       updateData(dbNew, 'flashcards', '2021', res.data)
     }, (err) => {
       console.log(err)
