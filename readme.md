@@ -1,4 +1,4 @@
-# YouTube Screen Time &nbsp; <img src="https://img.shields.io/badge/status-inprogress-yellow" alt="status">
+# Linguesia &nbsp; <img src="https://img.shields.io/badge/status-inprogress-yellow" alt="status">
 
 ### Mobile app for learning German
 
