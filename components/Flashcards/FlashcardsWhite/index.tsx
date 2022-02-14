@@ -9,29 +9,29 @@ import ProgressBar from './ProgressBar';
 import styles from './styles';
 
 export type FlashcardWhiteProps = {
-    name: string
     id: number
+    mainId: number
 }
 
-const FlashcardWhite = ({name, id}:FlashcardWhiteProps) => {
+const FlashcardWhite = ({id, mainId}:FlashcardWhiteProps) => {
     const [progressValue, setProgressValue] = useState(-280);
     const [toLearn, setToLearn] = useState(0);
     const [learning, setLearning] = useState(0);
     const [learnt, setLearnt] = useState(0);
 
     const db = SQLite.openDatabase('linguesia.db');
-
+    
 
     useEffect(() => {
-        numOfRemembered(db, 0, id).then((res) => {
+        numOfRemembered(db, 0, id, mainId).then((res) => {
             setToLearn(res);
         });
 
-        numOfRemembered(db, 1, id).then((res) => {
+        numOfRemembered(db, 1, id, mainId).then((res) => {
             setLearning(res);
         });
 
-        numOfRemembered(db, 2, id).then((res) => {
+        numOfRemembered(db, 2, id, mainId).then((res) => {
             setLearnt(res);
         });
     });
@@ -49,7 +49,7 @@ const FlashcardWhite = ({name, id}:FlashcardWhiteProps) => {
                     <Counter title={'Nauczone'} color={Colors.theme.text} counter={learnt}/>
                 </View>
             </View>
-            <FlashcardElement setProgressValue={setProgressValue} setLearning={setLearning} name={name} id={id}/>
+            <FlashcardElement setProgressValue={setProgressValue} setLearning={setLearning} id={id} mainId={mainId}/>
             <ProgressBar progressValue={progressValue} color={Colors.theme.cardColor} absolute={true}/>
         </View>
     )

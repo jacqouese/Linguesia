@@ -17,8 +17,7 @@ const Main = ({ category }: MainProps) => {
     const db = SQLite.openDatabase('linguesia.db');
 
     useEffect(() => {
-        getFlashcardLevels(db, (res) => {
-            console.log(res.rows._array)
+        getFlashcardLevels(db, parseInt(category.id), (res) => {
             setSubcategory(res.rows._array);
         })
     }, [])

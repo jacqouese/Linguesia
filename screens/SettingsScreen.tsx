@@ -5,7 +5,8 @@ import * as SQLite from 'expo-sqlite';
 import { Asset } from 'expo-asset';
 import axios from 'axios';
 import { Text, View } from '../components/Themed';
-import { showFlashcards, showTables, updateDataFlashcardLevels, updateDataFlashcards } from '../adapters/sql';
+import { prepareNewLevelProgress, showFlashcards, showProgress, showTables, updateDataFlashcardCategory, updateDataFlashcardLevels, updateDataFlashcards, updateDataFlashcardsNew } from '../adapters/sql';
+import { updateFlashcard } from '../databases/schemas';
 
 export default function SettingsScreen() {
 
@@ -52,14 +53,25 @@ export default function SettingsScreen() {
 
   const onQuery = () => {
     axios.get(`http://192.168.1.47:8000/api/flashcards`).then((res) => {
-      updateDataFlashcards(dbNew, 'flashcards', '2021', res.data);
+      updateDataFlashcardsNew(dbNew, 'flashcards', '2021', res.data);
 
       axios.get(`http://192.168.1.47:8000/api/levels`).then((res) => {
         updateDataFlashcardLevels(dbNew, '2021', res.data);
+
+        axios.get(`http://192.168.1.47:8000/api/category`).then((res) => {
+          updateDataFlashcardCategory(dbNew, '2021', res.data);
+        })
+
       })
     }, (err) => {
       console.log(err)
     })
+  }
+
+  const updateFlashcardCategory = () => {
+    axios.get(`http://192.168.1.47:8000/api/category`).then((res) => {
+          updateDataFlashcardCategory(dbNew, '2021', res.data);
+        })
   }
 
   return (
@@ -85,6 +97,24 @@ export default function SettingsScreen() {
       <Button
         onPress={() => showFlashcards(dbNew)}
         title="console.log flashcard_levels"
+        color="#FFF"
+      />
+      <Text>------------</Text>
+      <Button
+        onPress={() => showProgress(dbNew)}
+        title="console.log flashcard_progress"
+        color="#FFF"
+      />
+      <Text>------------</Text>
+      <Button
+        onPress={() => prepareNewLevelProgress(dbNew, '2021', 1, 1)}
+        title="prepare flashcard_progress"
+        color="#FFF"
+      />
+      <Text>------------</Text>
+      <Button
+        onPress={() => updateFlashcardCategory(dbNew)}
+        title="update flashcardCategory"
         color="#FFF"
       />
     </View>

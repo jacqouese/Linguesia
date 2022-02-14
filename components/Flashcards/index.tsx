@@ -29,7 +29,7 @@ const Flashcards = () => {
 
     const main = route.params.main;
     const sub = route.params.sub;
-    const title = sub.title.replace(/\s/g, '').toLowerCase();
+
     
     return (
         <View style={styles.container}>
@@ -41,7 +41,7 @@ const Flashcards = () => {
             >
                 <Ionicons name="close-outline" size={40} color={color} />
             </TouchableOpacity>
-            <FlashcardWhite name={title} id={sub.id}/>
+            <FlashcardWhite id={sub.id} mainId={main.id}/>
         </View>
     )
 }

@@ -37,23 +37,23 @@ const Subcategory = () => {
     }
 
     const db = SQLite.openDatabase('linguesia.db');
-    console.log(sub)
+
     const updateCounters = () => {
-        numOfRemembered(db, 0, sub.id).then((res) => {
+        numOfRemembered(db, 0, sub.id, main.id).then((res) => {
             setToLearn(res);
             
         }, () => {
             alert('poziom nie istnieje');
         });
 
-        numOfRemembered(db, 1, sub.id).then((res) => {
+        numOfRemembered(db, 1, sub.id, main.id).then((res) => {
             setLearning(res);
             
         }, () => {
             // nothing
         });
 
-        numOfRemembered(db, 2, sub.id).then((res) => {
+        numOfRemembered(db, 2, sub.id, main.id).then((res) => {
             setLearnt(res);
         }, () => {
             // nothing

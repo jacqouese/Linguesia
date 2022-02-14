@@ -11,8 +11,8 @@ import { getFlashcards, updateFlashcardRemembered } from '../../../../adapters/s
 export type FlashcardElementProps = {
     setProgressValue: any,
     setLearning: any,
-    name: string,
-    id: number
+    id: number,
+    mainId: number
 }
 
 export type FlashcardStateProps = {
@@ -27,7 +27,7 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 
-const FlashcardElement = ({setProgressValue, setLearning, name, id}:FlashcardElementProps) => {
+const FlashcardElement = ({setProgressValue, setLearning, id, mainId}:FlashcardElementProps) => {
     const [index, setIndex] = useState(0);
     const [currentFlashcard, setCurrentFlashcard] = useState<FlashcardStateProps[]>([]);
     const [finishFlashcard, setFinishFlashcard] = useState([]);
@@ -38,7 +38,7 @@ const FlashcardElement = ({setProgressValue, setLearning, name, id}:FlashcardEle
     const route = useRoute();
     useEffect(() => {
         // get flashcards from sqlite and add to state
-        getFlashcards(db, id, (res:any) => {
+        getFlashcards(db, id, mainId, (res:any) => {
             res.rows._array.map((item:any) => {
                 setCurrentFlashcard(currentFlashcard => [...currentFlashcard, {
                     id: currentFlashcard.length,
@@ -191,8 +191,7 @@ const FlashcardElement = ({setProgressValue, setLearning, name, id}:FlashcardEle
                         // remembered ++ for the current card
                         currentFlashcard[index]['remembered'] = currentFlashcard[index]['remembered'] + 1;
                         updateFlashcardRemembered(
-                            db, 
-                            name, 
+                            db,
                             currentFlashcard[index]['remote_id'], 
                             currentFlashcard[index]['remembered']
                         );

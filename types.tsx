@@ -13,14 +13,15 @@ export type CategoryType = {
   id: string,
   title: string,
   subtitle: string,
-  color: string,
+  color: colorType,
   images: string,
-  subcategory: SubcategoryType,
 };
 
 export type SubcategoryType = {
   id: string,
-  title: string,
-  subtitle: string,
+  title_polish: string,
+  subtitle_polish: string,
   image: string,
 };
+
+export type colorType = Array<any>
