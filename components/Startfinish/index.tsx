@@ -10,14 +10,14 @@ import Colors, { isDark } from '../../constants/Colors';
 import SubcategoryElement from '../Subcategory/Main/SubcategoryElement';
 import ProgressBar from '../Flashcards/FlashcardsWhite/ProgressBar';
 import Counter from '../Flashcards/FlashcardsWhite/Counter';
-import { numOfRemembered, resetLevelProgress } from '../../adapters/sql';
+import { numOfRemembered, prepareNewLevelProgress, resetLevelProgress } from '../../adapters/sql';
 
 
 
 const Subcategory = () => {
 
     
-    const [toLearn, setToLearn] = useState(0);
+    const [toLearn, setToLearn] = useState(-1);
     const [learning, setLearning] = useState(0);
     const [learnt, setLearnt] = useState(0);
 
@@ -39,35 +39,45 @@ const Subcategory = () => {
     const db = SQLite.openDatabase('linguesia.db');
 
     const updateCounters = () => {
-        numOfRemembered(db, 0, sub.id, main.id).then((res) => {
-            setToLearn(res);
-            
-        }, () => {
-            alert('poziom nie istnieje');
-        });
+        return new Promise(resolve => {
+            numOfRemembered(db, 0, sub.id, main.id).then((res) => {
+                const first = res;
+                setToLearn(res);
 
-        numOfRemembered(db, 1, sub.id, main.id).then((res) => {
-            setLearning(res);
-            
-        }, () => {
-            // nothing
-        });
+                numOfRemembered(db, 1, sub.id, main.id).then((res) => {
+                    const second = res;
+                    setLearning(res);
 
-        numOfRemembered(db, 2, sub.id, main.id).then((res) => {
-            setLearnt(res);
-        }, () => {
-            // nothing
-        });
+                    numOfRemembered(db, 2, sub.id, main.id).then((res) => {
+                        const third = res;
+                        setLearnt(res);
+                        resolve({first, second, third})
+                    }, () => {
+                        // on error
+                    });
+                }, () => {
+                    // on error
+                });
+            }, () => {
+                alert('poziom nie istnieje');
+            });
+        })
         
     }
     
     useEffect(() => {
-        updateCounters();
+        updateCounters().then(({first, second, third}) => {
+            if (first == 0 && second == 0 && third == 0) { // level launched first time
+                console.log('level launched first time')
+
+                prepareNewLevelProgress(db, '2022', sub.id, main.id);
+                updateCounters();
+            }
+        })
     }, [isFocused]);
 
     useEffect(() => {
-        setProgressValue(-320 + (learnt * 0.85 + learning * 0.3) * (320/(toLearn+learning+learnt-1)));
-        console.log(sub)
+        setProgressValue(-320 + (learnt * 0.85 + learning * 0.3) * (320/(toLearn+learning+learnt-1))); 
     }, [learning, learnt])
 
     const onStart = () => {
