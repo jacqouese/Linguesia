@@ -5,8 +5,7 @@ import * as SQLite from 'expo-sqlite';
 import { Asset } from 'expo-asset';
 import axios from 'axios';
 import { Text, View } from '../components/Themed';
-import { logFlashcardsRemeberedJoin, prepareNewLevelProgress, showFlashcards, showProgress, showTables, updateDataFlashcardCategory, updateDataFlashcardLevels, updateDataFlashcards, updateDataFlashcardsNew } from '../adapters/sql';
-import { updateFlashcard } from '../databases/schemas';
+import { logFlashcardsRemeberedJoin, prepareNewLevelProgress, showFlashcards, showProgress, showTables, updateDataFlashcardCategory, updateDataFlashcardLevels, updateDataFlashcardsNew } from '../adapters/sql';
 
 export default function SettingsScreen() {
 
@@ -17,7 +16,7 @@ export default function SettingsScreen() {
     return `${date} ${time}`;
   }
 
-  async function openDatabase(pathToDatabaseFile: string) {
+  async function createDatabase(pathToDatabaseFile: string) { // create SQLite database on user device
     // check if sqlite directory exits
     if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
         await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
@@ -39,18 +38,15 @@ export default function SettingsScreen() {
     
   }
 
-  const onPress = () => {
-    openDatabase('../data/db/germanpolish.db')
-  }
-
   const onNewDb = () => {
-    openDatabase('../data/db/linguesia.db')
+    createDatabase('../data/db/linguesia.db')
   }
 
   const db = SQLite.openDatabase('germanpolish.db')
 
   const dbNew = SQLite.openDatabase('linguesia.db')
 
+  // query server and populate SQLite with data
   const onQuery = () => {
     axios.get(`http://192.168.1.47:8000/api/flashcards`).then((res) => {
       updateDataFlashcardsNew(dbNew, 'flashcards', '2021', res.data);
@@ -60,18 +56,18 @@ export default function SettingsScreen() {
 
         axios.get(`http://192.168.1.47:8000/api/category`).then((res) => {
           updateDataFlashcardCategory(dbNew, '2021', res.data);
-        })
+        });
 
-      })
+      });
     }, (err) => {
-      console.log(err)
+      console.log(err);
     })
   }
 
   const updateFlashcardCategory = () => {
     axios.get(`http://192.168.1.47:8000/api/category`).then((res) => {
           updateDataFlashcardCategory(dbNew, '2021', res.data);
-        })
+      })
   }
 
   return (

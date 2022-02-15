@@ -12,7 +12,6 @@ import { RootStackParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import SettingsScreen from '../screens/SettingsScreen';
 
-import Login from '../screens/LoginScreen';
 import LoginScreen from '../screens/LoginScreen';
 
 // If you are not familiar with React Navigation, we recommend going through the

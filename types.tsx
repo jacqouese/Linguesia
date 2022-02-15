@@ -24,4 +24,12 @@ export type SubcategoryType = {
   image: string,
 };
 
+export type FlashcardStateProps = {
+  id: number,
+  remote_id: number,
+  word: string,
+  translation: string,
+  remembered: number
+}
+
 export type colorType = Array<any>

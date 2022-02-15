@@ -1,4 +1,3 @@
-import { DarkTheme } from '@react-navigation/native';
 import { Appearance } from 'react-native';
 
 const colorScheme = Appearance.getColorScheme();

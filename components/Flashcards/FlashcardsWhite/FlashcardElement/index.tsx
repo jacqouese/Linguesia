@@ -1,26 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, Animated, PanResponder, Dimensions, Button } from 'react-native';
-import flashcards from '../../../../data/flashcards/flashcards';
+import { View, Text, Animated, PanResponder, Dimensions } from 'react-native';
 import * as SQLite from 'expo-sqlite';
-import styles from './styles';
 import { Image } from 'react-native-animatable';
-import FlashcardWhite from '..';
 import { useNavigation, useRoute } from '@react-navigation/native';
+
+import styles from './styles';
 import { getFlashcards, updateFlashcardRemembered } from '../../../../adapters/sql'
+import { FlashcardStateProps } from '../../../../types';
 
 export type FlashcardElementProps = {
-    setProgressValue: any,
-    setLearning: any,
+    setProgressValue: Function,
+    setLearning: Function,
     id: number,
     mainId: number
-}
-
-export type FlashcardStateProps = {
-    id: number,
-    remote_id: number,
-    word: string,
-    translation: string,
-    remembered: number
 }
 
 const width = Dimensions.get('window').width;
@@ -164,7 +156,6 @@ const FlashcardElement = ({setProgressValue, setLearning, id, mainId}:FlashcardE
 
     // when cards run out
     const onEnd = () => {
-        
         navigation.navigate('StartFinish');
     }
 
@@ -230,7 +221,7 @@ const FlashcardElement = ({setProgressValue, setLearning, id, mainId}:FlashcardE
                     }
                     else if (args[1].dx == 0 && args[1].dy == 0) {
                         // activate press
-                        onPress()
+                        onPress();
                     }
                     else {
                         // return to original positon
@@ -239,7 +230,7 @@ const FlashcardElement = ({setProgressValue, setLearning, id, mainId}:FlashcardE
                             useNativeDriver: false
                         }).start()
                     }
-                    pan.flattenOffset()
+                    pan.flattenOffset();
                 }
         }),
         [index, flipValue]

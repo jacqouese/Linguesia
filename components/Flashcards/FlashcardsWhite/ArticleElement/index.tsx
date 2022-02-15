@@ -6,6 +6,8 @@ import styles from './styles';
 import Colors from '../../../../constants/Colors';
 import { getFlashcards } from '../../../../adapters/sql';
 
+import { FlashcardStateProps } from '../../../../types';
+
 type ArticleElementProps = {
     setProgressValue: Function,
     setLearning: Function,
@@ -21,7 +23,7 @@ const ArticleElement = ({setProgressValue, setLearning, id, mainId}:ArticleEleme
         {id: 2, name: 'das', color: Colors.theme.accent, pressed: false}
     ];
 
-    const [currentFlashcard, setCurrentFlashcard] = useState([])
+    const [currentFlashcard, setCurrentFlashcard] = useState<FlashcardStateProps[]>([])
     const [articles, setArticles] = useState(articlesArray);
     const [correctAnswer, setCorrentAnswer] = useState('die');
     const [pressCount, setPressCount] = useState(0);

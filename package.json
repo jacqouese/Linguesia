@@ -39,8 +39,7 @@
     "react-native-screens": "~3.10.1",
     "react-native-swipeout": "^2.3.6",
     "react-native-web": "0.17.1",
-    "react-navigation-shared-element": "^2.3.1",
-    "realm": "^10.1.2"
+    "react-navigation-shared-element": "^2.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

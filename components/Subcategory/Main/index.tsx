@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Dimensions } from 'react-native';
 import * as Animatable from 'react-native-animatable'
 import * as SQLite from 'expo-sqlite';
-import { CategoryType } from '../../../types';
-import styles from './styles';
 import SubcategoryElement from './SubcategoryElement';
+
+import styles from './styles';
 import { getFlashcardLevels } from '../../../adapters/sql';
+import { CategoryType } from '../../../types';
 
 export type MainProps = {
     category: CategoryType,
 }
 
-const Main = ({ category }: MainProps) => {
+const Main = ({ category }:MainProps) => {
     const [subcategory, setSubcategory] = useState([])
 
     const db = SQLite.openDatabase('linguesia.db');
