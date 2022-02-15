@@ -193,6 +193,7 @@ const FlashcardElement = ({setProgressValue, setLearning, id, mainId}:FlashcardE
                         updateFlashcardRemembered(
                             db,
                             currentFlashcard[index]['remote_id'], 
+                            mainId,
                             currentFlashcard[index]['remembered']
                         );
                         // updateRemembered(currentFlashcard[index]['remembered'], currentFlashcard[index]['sql_id']);

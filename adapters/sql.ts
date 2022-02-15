@@ -1,9 +1,9 @@
 import * as SQLite from 'expo-sqlite';
 
 // update value of flashcard_remembered in a flashcard
-export const updateFlashcardRemembered = (dbObject:SQLite.WebSQLDatabase, cardId:number, rememberedValue:number) => {
+export const updateFlashcardRemembered = (dbObject:SQLite.WebSQLDatabase, cardId:number, levelType:number, rememberedValue:number) => {
     dbObject.transaction((tx) => {
-        tx.executeSql(`UPDATE flashcard_progress SET remembered = ? where remote_id = ?`, [rememberedValue, cardId], (tx, result) => {
+        tx.executeSql(`UPDATE flashcard_progress SET remembered = ? where remote_id = ? and level_type = ?`, [rememberedValue, cardId, levelType], (tx, result) => {
             // nothing
         }, (tx, err) => {
             console.log(err)
@@ -162,4 +162,15 @@ export const showTables = (dbObject:SQLite.WebSQLDatabase) => {
             console.log(err)
         });
      });
+}
+
+export const logFlashcardsRemeberedJoin = (dbObject:SQLite.WebSQLDatabase, id:number, categoryId:number):Promise<number> => {
+    dbObject.transaction((tx) => {
+        tx.executeSql(`SELECT * FROM flashcard_progress INNER JOIN flashcards ON flashcard_progress.remote_id = flashcards.remote_id WHERE flashcards.flashcard_levels_id = ? and flashcard_progress.level_type = ?`, [id, categoryId], (tx, result) => {
+            console.log(result.rows._array);
+        }, (tx, err) => {
+            console.log(err)
+        });
+    });
+   
 }

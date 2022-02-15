@@ -5,7 +5,7 @@ import * as SQLite from 'expo-sqlite';
 import { Asset } from 'expo-asset';
 import axios from 'axios';
 import { Text, View } from '../components/Themed';
-import { prepareNewLevelProgress, showFlashcards, showProgress, showTables, updateDataFlashcardCategory, updateDataFlashcardLevels, updateDataFlashcards, updateDataFlashcardsNew } from '../adapters/sql';
+import { logFlashcardsRemeberedJoin, prepareNewLevelProgress, showFlashcards, showProgress, showTables, updateDataFlashcardCategory, updateDataFlashcardLevels, updateDataFlashcards, updateDataFlashcardsNew } from '../adapters/sql';
 import { updateFlashcard } from '../databases/schemas';
 
 export default function SettingsScreen() {
@@ -115,6 +115,12 @@ export default function SettingsScreen() {
       <Button
         onPress={() => updateFlashcardCategory(dbNew)}
         title="update flashcardCategory"
+        color="#FFF"
+      />
+      <Text>------------</Text>
+      <Button
+        onPress={() => logFlashcardsRemeberedJoin(dbNew, 1, 2)}
+        title="log joined flashcards"
         color="#FFF"
       />
     </View>

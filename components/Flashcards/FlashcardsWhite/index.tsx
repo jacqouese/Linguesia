@@ -35,6 +35,8 @@ const FlashcardWhite = ({id, mainId, isArticleCard = false}:FlashcardWhiteProps)
         numOfRemembered(db, 2, id, mainId).then((res) => {
             setLearnt(res);
         });
+
+        console.log(id, mainId)
     });
 
     return (
@@ -52,9 +54,9 @@ const FlashcardWhite = ({id, mainId, isArticleCard = false}:FlashcardWhiteProps)
             </View>
             {isArticleCard ? 
                 (
-                    <ArticleElement />
+                    <ArticleElement setProgressValue={setProgressValue} setLearning={setLearning} id={id} mainId={mainId} />
                 ) : (
-                    <FlashcardElement setProgressValue={setProgressValue} setLearning={setLearning} id={id} mainId={mainId}/>
+                    <FlashcardElement setProgressValue={setProgressValue} setLearning={setLearning} id={id} mainId={mainId} />
                 )}
             
             <ProgressBar progressValue={progressValue} color={Colors.theme.cardColor} absolute={true}/>
