@@ -26,7 +26,7 @@ export const numOfRemembered = async (dbObject:SQLite.WebSQLDatabase, remembered
 }
 
 // reset progress of a level
-export const resetLevelProgress = (dbObject:SQLite.WebSQLDatabase, table:string) => {
+export const resetLevelProgress = (dbObject:SQLite.WebSQLDatabase) => {
     dbObject.transaction((tx) => {
         tx.executeSql(`UPDATE flashcard_progress SET remembered = 0`, [], (tx, result) => {
             return true;

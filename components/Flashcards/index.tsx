@@ -29,6 +29,7 @@ const Flashcards = () => {
 
     const main = route.params.main;
     const sub = route.params.sub;
+    const isArticleCard = route.params.isArticleCard || false;
 
     
     return (
@@ -41,7 +42,7 @@ const Flashcards = () => {
             >
                 <Ionicons name="close-outline" size={40} color={color} />
             </TouchableOpacity>
-            <FlashcardWhite id={sub.id} mainId={main.id}/>
+            <FlashcardWhite id={sub.id} mainId={main.id} isArticleCard={isArticleCard} />
         </View>
     )
 }

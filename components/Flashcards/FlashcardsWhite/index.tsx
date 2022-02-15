@@ -7,13 +7,15 @@ import Counter from './Counter';
 import FlashcardElement from './FlashcardElement';
 import ProgressBar from './ProgressBar';
 import styles from './styles';
+import ArticleElement from './ArticleElement';
 
 export type FlashcardWhiteProps = {
     id: number
     mainId: number
+    isArticleCard?: boolean
 }
 
-const FlashcardWhite = ({id, mainId}:FlashcardWhiteProps) => {
+const FlashcardWhite = ({id, mainId, isArticleCard = false}:FlashcardWhiteProps) => {
     const [progressValue, setProgressValue] = useState(-280);
     const [toLearn, setToLearn] = useState(0);
     const [learning, setLearning] = useState(0);
@@ -21,7 +23,6 @@ const FlashcardWhite = ({id, mainId}:FlashcardWhiteProps) => {
 
     const db = SQLite.openDatabase('linguesia.db');
     
-
     useEffect(() => {
         numOfRemembered(db, 0, id, mainId).then((res) => {
             setToLearn(res);
@@ -49,7 +50,13 @@ const FlashcardWhite = ({id, mainId}:FlashcardWhiteProps) => {
                     <Counter title={'Nauczone'} color={Colors.theme.text} counter={learnt}/>
                 </View>
             </View>
-            <FlashcardElement setProgressValue={setProgressValue} setLearning={setLearning} id={id} mainId={mainId}/>
+            {isArticleCard ? 
+                (
+                    <ArticleElement />
+                ) : (
+                    <FlashcardElement setProgressValue={setProgressValue} setLearning={setLearning} id={id} mainId={mainId}/>
+                )}
+            
             <ProgressBar progressValue={progressValue} color={Colors.theme.cardColor} absolute={true}/>
         </View>
     )

@@ -78,43 +78,44 @@ const Subcategory = () => {
 
     useEffect(() => {
         setProgressValue(-320 + (learnt * 0.85 + learning * 0.3) * (320/(toLearn+learning+learnt-1))); 
-    }, [learning, learnt])
+    }, [learning, learnt]);
+
+    const startLevel = (isArticleCard:boolean) => {
+         // check if there are any more flashcards to learn
+         if (toLearn != 0 || learning != 0) {
+            // navigate to flashcards
+            navigation.navigate('Flashcards', {main: main, sub: sub, isArticleCard: isArticleCard});
+        }
+        else {
+            // ask user if they wanna reset their progress
+            Alert.alert(
+                "Wyzeruj postęp?",
+                "Wszystkie słowa zostały już nauczone, czy chcesz wyzerować postęp dla tego poziomu?",
+                [
+                  // The "Yes" button
+                  {
+                    text: "Tak",
+                    onPress: () => {
+                      resetLevelProgress(db);
+                      updateCounters();
+                    },
+                  },
+                  // The "No" button
+                  {
+                    text: "Nie",
+                  },
+                ]
+              );
+        }
+    }
 
     const onStart = () => {
-        if (main.id == 1) {
-            // check if there are any more flashcards to learn
-            if (toLearn != 0 || learning != 0) {
-                // navigate to flashcards
-                navigation.navigate('Flashcards', {main: main, sub: sub});
-            }
-            else {
-                // ask user if they wanna reset their progress
-                Alert.alert(
-                    "Wyzeruj postęp?",
-                    "Wszystkie słowa zostały już nauczone, czy chcesz wyzerować postęp dla tego poziomu?",
-                    [
-                      // The "Yes" button
-                      {
-                        text: "Tak",
-                        onPress: () => {
-                          resetLevelProgress(db, tableName);
-                          updateCounters();
-                        },
-                      },
-                      // The "No" button
-                      {
-                        text: "Nie",
-                      },
-                    ]
-                  );
-            }
-            
+        console.log(main.id)
+        if (main.id == 1 || main.id == 3) {
+            startLevel(false);
         }
         else if (main.id == 2) {
-            alert('navigate to word genders');
-        }
-        else if (main.id == 3) {
-            alert('navigate to irregular');
+            startLevel(true);
         }
     
     }
