@@ -8,9 +8,15 @@ const styles = StyleSheet.create ({
     articleContainer: {
         width: width - (width/8),
         height: height/3,
+        justifyContent: 'center',
+        alignItems: 'center',
         marginVertical: height/15,
         backgroundColor: Colors.theme.cardColor,
         borderRadius: 40
+    },
+    articleCardContainer: {
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -29,6 +35,16 @@ const styles = StyleSheet.create ({
     buttonText: {
         color: Colors.theme.text,
         fontWeight: 'bold'
+    },
+    text: {
+        marginVertical: 7,
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: Colors.dark.text,
+    },
+    secondaryText: {
+        fontSize: 15,
+        color: Colors.dark.text,
     }
 })
 

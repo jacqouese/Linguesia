@@ -4,7 +4,7 @@ import * as SQLite from 'expo-sqlite';
 export const updateFlashcardRemembered = (dbObject:SQLite.WebSQLDatabase, cardId:number, levelType:number, rememberedValue:number) => {
     dbObject.transaction((tx) => {
         tx.executeSql(`UPDATE flashcard_progress SET remembered = ? where remote_id = ? and level_type = ?`, [rememberedValue, cardId, levelType], (tx, result) => {
-            // nothing
+            console.log(result)
         }, (tx, err) => {
             console.log(err)
         });

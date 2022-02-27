@@ -28,6 +28,7 @@ export type FlashcardStateProps = {
   id: number,
   remote_id: number,
   word: string,
+  article: string,
   translation: string,
   remembered: number
 }

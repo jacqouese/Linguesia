@@ -1,10 +1,10 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import * as SQLite from 'expo-sqlite';
 
 import styles from './styles';
 import Colors from '../../../../constants/Colors';
-import { getFlashcards } from '../../../../adapters/sql';
+import { getFlashcards, updateFlashcardRemembered } from '../../../../adapters/sql';
 
 import { FlashcardStateProps } from '../../../../types';
 
@@ -23,9 +23,10 @@ const ArticleElement = ({setProgressValue, setLearning, id, mainId}:ArticleEleme
         {id: 2, name: 'das', color: Colors.theme.accent, pressed: false}
     ];
 
+    const [index, setIndex] = useState(0)
     const [currentFlashcard, setCurrentFlashcard] = useState<FlashcardStateProps[]>([])
     const [articles, setArticles] = useState(articlesArray);
-    const [correctAnswer, setCorrentAnswer] = useState('die');
+    const [correctAnswer, setCorrentAnswer] = useState('');
     const [pressCount, setPressCount] = useState(0);
 
     const db = SQLite.openDatabase('linguesia.db');
@@ -38,7 +39,8 @@ const ArticleElement = ({setProgressValue, setLearning, id, mainId}:ArticleEleme
                 setCurrentFlashcard(currentFlashcard => [...currentFlashcard, {
                     id: currentFlashcard.length,
                     remote_id: item.remote_id,
-                    word: `${item.german_article} ${item.german}`,
+                    word: item.german,
+                    article: item.german_article,
                     translation: item.polish,
                     remembered: item.remembered
                     }])
@@ -47,8 +49,22 @@ const ArticleElement = ({setProgressValue, setLearning, id, mainId}:ArticleEleme
             setLearning(res.rows.length);
         })
       }, []);
-    
 
+
+    const resetArticleButtons = () => {
+        setArticles(articlesArray);
+        setPressCount(0)
+    }
+
+
+    // set correct article answer
+    useEffect(() => {
+        if(currentFlashcard.length != 0) {
+            setCorrentAnswer(currentFlashcard[index].article);
+        }
+    }, [currentFlashcard, index])
+    
+    // handle article buttons
     const onPress = (articleId:number, articleName:string) => {
         setPressCount(pressCount+1);
         let newArticlesArray = [...articles];
@@ -56,6 +72,21 @@ const ArticleElement = ({setProgressValue, setLearning, id, mainId}:ArticleEleme
         if (correctAnswer == articleName) { // if pressed answer is correct
             newArticlesArray[articleId].color = 'green';
             setArticles(newArticlesArray);
+
+            // next card
+            setTimeout(() => {
+                setIndex(index+1);
+                resetArticleButtons();
+
+                setProgressValue(-280 + index * (280/(currentFlashcard.length-1)));
+
+                updateFlashcardRemembered( // update flashcard remebered value in the database
+                    db,
+                    currentFlashcard[index]['remote_id'], 
+                    mainId,
+                    currentFlashcard[index]['remembered']+1
+                );
+            }, 1500)
         }
         else {
             newArticlesArray[articleId].color = 'red';
@@ -64,22 +95,46 @@ const ArticleElement = ({setProgressValue, setLearning, id, mainId}:ArticleEleme
         }
     }
 
+
+    // reset buttons if user pressed 2 times
     useEffect(() => {
         if (pressCount === 2) {
             setTimeout(() => {
-                setArticles(articlesArray);
-                setPressCount(0)
+                resetArticleButtons();
             }, 500);
         }
     }, [pressCount]);
 
     
-   
+   const renderArticleFlashcards = () => {
+        return currentFlashcard.map((item, i) => {
+            if (i < index) {
+                return null
+            }
+            else if (i == index) {
+                return (
+                    <View style={styles.articleCardContainer}>
+                        <Image 
+                            source={{
+                                uri: 'http://192.168.1.47:8000/images/fruits.png',
+                            }}
+                            style={{
+                                width: 120, 
+                                height: 120
+                            }}
+                        />
+                        <Text style={styles.text}>{item.word}</Text>
+                        <Text style={styles.secondaryText}>{item.translation}</Text>
+                    </View>
+                )
+            }
+        })
+   }
 
     return (
         <View>
             <View style={styles.articleContainer}>
-                <Text>word</Text>
+                {renderArticleFlashcards()}
             </View>
             <View style={styles.buttonContainer}>
                 {articles.map((article) => 
