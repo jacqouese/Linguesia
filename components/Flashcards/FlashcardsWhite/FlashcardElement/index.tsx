@@ -35,6 +35,7 @@ const FlashcardElement = ({setProgressValue, setLearning, id, mainId}:FlashcardE
                     id: currentFlashcard.length,
                     remote_id: item.remote_id,
                     word: `${item.german_article} ${item.german}`,
+                    article: item.german_article,
                     translation: item.polish,
                     remembered: item.remembered
                     }])
