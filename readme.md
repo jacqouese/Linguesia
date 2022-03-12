@@ -19,4 +19,4 @@ Learn German with flashcards and other memorization methods
 
 ## Overview
 
-<img src="https://drive.google.com/uc?export=view&id=17p2wbedVQHIq-gTBafwa93IXOp_MteIE" alt="img">
+<img src="https://drive.google.com/uc?export=view&id=1dcff3c3ER-QOvCzs1bdWD4CK1217N3Lh" alt="img">
