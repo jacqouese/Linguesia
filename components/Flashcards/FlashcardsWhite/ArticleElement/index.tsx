@@ -7,6 +7,7 @@ import Colors from '../../../../constants/Colors';
 import { getFlashcards, updateFlashcardRemembered } from '../../../../adapters/sql';
 
 import { FlashcardStateProps } from '../../../../types';
+import baseURL from '../../../../api/baseURL';
 
 type ArticleElementProps = {
     setProgressValue: Function,
@@ -116,7 +117,7 @@ const ArticleElement = ({setProgressValue, setLearning, id, mainId}:ArticleEleme
                     <View style={styles.articleCardContainer}>
                         <Image 
                             source={{
-                                uri: 'http://192.168.1.47:8000/images/fruits.png',
+                                uri: baseURL+'images/fruits.png',
                             }}
                             style={{
                                 width: 120, 

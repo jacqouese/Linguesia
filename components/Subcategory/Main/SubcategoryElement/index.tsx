@@ -7,6 +7,7 @@ import { CategoryType } from '../../../../types';
 import { SubcategoryType } from '../../../../types';
 
 import styles from './styles';
+import baseURL from '../../../../api/baseURL';
 
 export type SubcategoryElementProps = {
     category: SubcategoryType,
@@ -22,7 +23,7 @@ const SubcategoryElement = ({ category, color, animate = true }: SubcategoryElem
         navigation.navigate('StartFinish', {main: color, sub: category});
     }
 
-    const image = `http://192.168.1.5:8000/images/${category.image}`
+    const image = baseURL+`images/${category.image}`
     
     var id = parseInt(category.id, 10);
 

@@ -6,6 +6,7 @@ import { Asset } from 'expo-asset';
 import axios from 'axios';
 import { Text, View } from '../components/Themed';
 import { logFlashcardsRemeberedJoin, prepareNewLevelProgress, showFlashcards, showProgress, showTables, updateDataFlashcardCategory, updateDataFlashcardLevels, updateDataFlashcardsNew } from '../adapters/sql';
+import baseURL from '../api/baseURL';
 
 export default function SettingsScreen() {
 
@@ -48,13 +49,13 @@ export default function SettingsScreen() {
 
   // query server and populate SQLite with data
   const onQuery = () => {
-    axios.get(`http://192.168.1.5:8000/api/flashcards`).then((res) => {
+    axios.get(baseURL+`api/flashcards`).then((res) => {
       updateDataFlashcardsNew(dbNew, 'flashcards', '2021', res.data);
 
-      axios.get(`http://192.168.1.5:8000/api/levels`).then((res) => {
+      axios.get(baseURL+`api/levels`).then((res) => {
         updateDataFlashcardLevels(dbNew, '2021', res.data);
 
-        axios.get(`http://192.168.1.5:8000/api/category`).then((res) => {
+        axios.get(baseURL+`api/category`).then((res) => {
           updateDataFlashcardCategory(dbNew, '2021', res.data);
         });
 
@@ -65,7 +66,7 @@ export default function SettingsScreen() {
   }
 
   const updateFlashcardCategory = () => {
-    axios.get(`http://192.168.1.5:8000/api/category`).then((res) => {
+    axios.get(baseURL+`api/category`).then((res) => {
           updateDataFlashcardCategory(dbNew, '2021', res.data);
       })
   }
