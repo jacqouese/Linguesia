@@ -23,7 +23,7 @@ const SubcategoryElement = ({ category, color, animate = true }: SubcategoryElem
         navigation.navigate('StartFinish', {main: color, sub: category});
     }
 
-    const image = baseURL+`images/${category.image}`
+    const image = baseURL+`images/${category.image}`;
     
     var id = parseInt(category.id, 10);
 

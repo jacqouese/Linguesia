@@ -8,8 +8,8 @@ const Suggested = () => {
         <View style={styles.container}>
             <View style={styles.colorBox}>
                 <View style={styles.suggested}>
-                    <Text style={styles.title}>Sugesja {"\n"}dla ciebie</Text>
-                    <Text style={styles.subtitle}>Lorem ipsum dolore</Text>
+                    <Text style={styles.title}>Sugestia</Text>
+                    <Text style={styles.subtitle}>Po ukończeniu poziomu {'\n'}z fiszkami, ukończ ten sam {'\n'}poziom z rodzajnikami.</Text>
                 </View>
                 <Image 
                 source={require('../../../assets/images/chat.png')}

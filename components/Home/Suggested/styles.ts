@@ -25,8 +25,9 @@ const styles = StyleSheet.create ({
     },
     subtitle: {
         color: Colors.dark.text,
+        marginTop: 15,
         fontSize: 15,
-        lineHeight: 40,
+        lineHeight: 20
     }
 })
 
