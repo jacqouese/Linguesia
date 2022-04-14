@@ -48,13 +48,13 @@ export default function SettingsScreen() {
 
   // query server and populate SQLite with data
   const onQuery = () => {
-    axios.get(`http://192.168.1.47:8000/api/flashcards`).then((res) => {
+    axios.get(`http://192.168.1.5:8000/api/flashcards`).then((res) => {
       updateDataFlashcardsNew(dbNew, 'flashcards', '2021', res.data);
 
-      axios.get(`http://192.168.1.47:8000/api/levels`).then((res) => {
+      axios.get(`http://192.168.1.5:8000/api/levels`).then((res) => {
         updateDataFlashcardLevels(dbNew, '2021', res.data);
 
-        axios.get(`http://192.168.1.47:8000/api/category`).then((res) => {
+        axios.get(`http://192.168.1.5:8000/api/category`).then((res) => {
           updateDataFlashcardCategory(dbNew, '2021', res.data);
         });
 
@@ -65,7 +65,7 @@ export default function SettingsScreen() {
   }
 
   const updateFlashcardCategory = () => {
-    axios.get(`http://192.168.1.47:8000/api/category`).then((res) => {
+    axios.get(`http://192.168.1.5:8000/api/category`).then((res) => {
           updateDataFlashcardCategory(dbNew, '2021', res.data);
       })
   }

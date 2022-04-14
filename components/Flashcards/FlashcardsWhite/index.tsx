@@ -35,8 +35,6 @@ const FlashcardWhite = ({id, mainId, isArticleCard = false}:FlashcardWhiteProps)
         numOfRemembered(db, 2, id, mainId).then((res) => {
             setLearnt(res);
         });
-
-        console.log(id, mainId)
     });
 
     return (

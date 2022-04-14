@@ -164,6 +164,7 @@ const FlashcardElement = ({setProgressValue, setLearning, id, mainId}:FlashcardE
     const panResponder = useMemo(
         () =>
         PanResponder.create({
+            onStartShouldSetPanResponderCapture: () => true, // needed for press to work
             onMoveShouldSetPanResponderCapture: () => true,
             onPanResponderGrant: () => {
                 pan.setOffset({
@@ -174,65 +175,62 @@ const FlashcardElement = ({setProgressValue, setLearning, id, mainId}:FlashcardE
             onPanResponderMove: Animated.event([null, {
                 dx: pan.x }],
                 {useNativeDriver: false}
-                ),
-                onPanResponderRelease: (...args) => {
-                    if (args[1].vx > 1) {
-                        // swipe to right side
-
-                        // remembered ++ for the current card
-                        currentFlashcard[index]['remembered'] = currentFlashcard[index]['remembered'] + 1;
-                        updateFlashcardRemembered( // update flashcard remebered value in the database
-                            db,
-                            currentFlashcard[index]['remote_id'], 
-                            mainId,
-                            currentFlashcard[index]['remembered']
-                        );
-                        Animated.spring(pan, {
-                            toValue: { x: width+100, y: 0 },
-                            useNativeDriver: false,
-                            restSpeedThreshold: 100,
-                            restDisplacementThreshold: 40
-                        }).start(() => {
-                            setIndex(index+1)
-                            pan.x.setValue(0)
-                            pan.y.setValue(0)
-                            // handle progress bar
-                            setProgressValue(-280 + index * (280/(currentFlashcard.length-1)));
-                            // if no cards left
-                            if (index >= currentFlashcard.length-1) {
-                                onEnd();
-                            }
-                        })
-                    }
-                    else if (args[1].vx < -1) {
-                        // swipe to left side
-                        Animated.spring(pan, {
-                            toValue: { x: -width-100, y: 0 },
-                            useNativeDriver: false,
-                            restSpeedThreshold: 100,
-                            restDisplacementThreshold: 40
-                        }).start(() => {
-                            setIndex(index+1)
-                            pan.x.setValue(0)
-                            pan.y.setValue(0)
-                            if (index >= currentFlashcard.length-1) {
-                                onEnd()
-                            }
-                        })
-                    }
-                    else if (args[1].dx == 0 && args[1].dy == 0) {
-                        // activate press
-                        onPress();
-                    }
-                    else {
-                        // return to original positon
-                        Animated.spring(pan, {
-                            toValue: { x: 0, y: 0 },
-                            useNativeDriver: false
-                        }).start()
-                    }
-                    pan.flattenOffset();
+            ),
+            onPanResponderRelease: (...args) => {
+                if (args[1].vx > 1) { // swipe to right side
+                    // remembered ++ for the current card
+                    currentFlashcard[index]['remembered'] = currentFlashcard[index]['remembered'] + 1;
+                    updateFlashcardRemembered( // update flashcard remebered value in the database
+                        db,
+                        currentFlashcard[index]['remote_id'], 
+                        mainId,
+                        currentFlashcard[index]['remembered']
+                    );
+                    Animated.spring(pan, {
+                        toValue: { x: width+100, y: 0 },
+                        useNativeDriver: false,
+                        restSpeedThreshold: 100,
+                        restDisplacementThreshold: 40
+                    }).start(() => {
+                        setIndex(index+1)
+                        pan.x.setValue(0)
+                        pan.y.setValue(0)
+                        // handle progress bar
+                        setProgressValue(-280 + index * (280/(currentFlashcard.length-1)));
+                        
+                        if (index >= currentFlashcard.length-1) { // if no cards left
+                            onEnd();
+                        }
+                    })
                 }
+                else if (args[1].vx < -1) {
+                    // swipe to left side
+                    Animated.spring(pan, {
+                        toValue: { x: -width-100, y: 0 },
+                        useNativeDriver: false,
+                        restSpeedThreshold: 100,
+                        restDisplacementThreshold: 40
+                    }).start(() => {
+                        setIndex(index+1)
+                        pan.x.setValue(0)
+                        pan.y.setValue(0)
+                        if (index >= currentFlashcard.length-1) {
+                            onEnd()
+                        }
+                    })
+                }
+                else if (args[1].dx == 0 && args[1].dy == 0) { // user pressed
+                    onPress();
+                }
+                else {
+                    // return to original positon
+                    Animated.spring(pan, {
+                        toValue: { x: 0, y: 0 },
+                        useNativeDriver: false
+                    }).start()
+                }
+                pan.flattenOffset();
+            }
         }),
         [index, flipValue]
     )

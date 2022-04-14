@@ -22,7 +22,7 @@ const SubcategoryElement = ({ category, color, animate = true }: SubcategoryElem
         navigation.navigate('StartFinish', {main: color, sub: category});
     }
 
-    const image = `http://192.168.1.47:8000/images/${category.image}`
+    const image = `http://192.168.1.5:8000/images/${category.image}`
     
     var id = parseInt(category.id, 10);
 
