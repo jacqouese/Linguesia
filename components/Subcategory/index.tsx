@@ -45,7 +45,7 @@ const Subcategory = () => {
              delay={100}
              useNativeDriver={true}
             >
-                <Text style={[styles.title, {color: text}]}>{item.title}</Text>
+                <Text style={[styles.title, {color: text}]}>{item.title} </Text>
                 <Text style={[styles.subtitle, {color: text}]}>{item.subtitle}</Text>
             </Animatable.View>
             <Image 

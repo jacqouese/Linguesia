@@ -71,7 +71,7 @@ const ArticleElement = ({setProgressValue, setLearning, id, mainId}:ArticleEleme
         let newArticlesArray = [...articles];
 
         if (correctAnswer == articleName) { // if pressed answer is correct
-            newArticlesArray[articleId].color = 'green';
+            newArticlesArray[articleId].color = Colors.theme.green;
             setArticles(newArticlesArray);
 
             // next card
@@ -90,7 +90,7 @@ const ArticleElement = ({setProgressValue, setLearning, id, mainId}:ArticleEleme
             }, 1500)
         }
         else {
-            newArticlesArray[articleId].color = 'red';
+            newArticlesArray[articleId].color = Colors.theme.red;
             newArticlesArray[articleId].pressed = true;
             setArticles(newArticlesArray);
         }

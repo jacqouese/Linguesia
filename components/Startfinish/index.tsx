@@ -154,7 +154,7 @@ const Subcategory = () => {
             </View>
         )
     }
-
+    console.log(main.color)
     return (
         <View style={[styles.container, , {backgroundColor: background}]}>
             <TouchableOpacity
@@ -169,13 +169,13 @@ const Subcategory = () => {
             
             <View style={styles.counterContainer}>
                 <View style={[styles.counterBackground, {backgroundColor: main.color.accent}]}>
-                    <Counter title={'Do nauczenia'} color={main.color.light} counter={toLearn}/>
+                    <Counter title={'Do nauczenia'} counter={toLearn}/>
                 </View>
                 <View style={[styles.counterBackground, {backgroundColor: main.color.accent}]}>
-                    <Counter title={'Ćwiczone'} color={main.color.light} counter={learning}/>
+                    <Counter title={'Ćwiczone'} counter={learning}/>
                 </View>
                 <View style={[styles.counterBackground, {backgroundColor: main.color.accent}]}>
-                    <Counter title={'Nauczone'} color={main.color.light} counter={learnt}/>
+                    <Counter title={'Nauczone'} counter={learnt}/>
                 </View>
             </View>
             <ProgressBar progressValue={progressValue} color={main.color.main}/>

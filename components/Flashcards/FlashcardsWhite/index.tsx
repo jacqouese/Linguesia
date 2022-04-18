@@ -41,13 +41,13 @@ const FlashcardWhite = ({id, mainId, isArticleCard = false}:FlashcardWhiteProps)
         <View style={styles.container}>
             <View style={styles.counterContainer}>
                 <View style={styles.counterBackground}>
-                    <Counter title={'Do nauczenia'} color={Colors.theme.text} counter={toLearn}/>
+                    <Counter title={'Do nauczenia'} fontColor={Colors.theme.text} counter={toLearn}/>
                 </View>
                 <View style={styles.counterBackground}>
-                    <Counter title={'Ćwiczone'} color={Colors.theme.text} counter={learning}/>
+                    <Counter title={'Ćwiczone'} fontColor={Colors.theme.text} counter={learning}/>
                 </View>
                 <View style={styles.counterBackground}>
-                    <Counter title={'Nauczone'} color={Colors.theme.text} counter={learnt}/>
+                    <Counter title={'Nauczone'} fontColor={Colors.theme.text} counter={learnt}/>
                 </View>
             </View>
             {isArticleCard ? 

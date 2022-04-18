@@ -40,7 +40,7 @@ const SubcategoryElement = ({ category, color, animate = true }: SubcategoryElem
          activeOpacity={0.8}
          onPress={onPress}
         >
-            <View style={[styles.left, {backgroundColor: color.color.accent}]}>
+            <View style={[styles.left, {backgroundColor: color.color.light}]}>
             <Image 
                 source={{
                     uri: image,
@@ -59,7 +59,7 @@ const SubcategoryElement = ({ category, color, animate = true }: SubcategoryElem
                 <Text style={styles.title}>{category.title_polish}</Text>
                 <Text style={styles.subtitle}>{category.subtitle_polish}</Text>
             </View>
-            <View style={{position: 'absolute', right: 20, width: 40, height: 40, borderRadius: 20, backgroundColor: color.color.accent}} />
+            <View style={{position: 'absolute', right: 20, width: 40, height: 40, borderRadius: 20, backgroundColor: color.color.light}} />
         </TouchableOpacity>
         </Animatable.View>
     )
