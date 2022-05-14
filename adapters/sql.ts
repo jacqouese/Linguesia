@@ -38,7 +38,7 @@ export const resetLevelProgress = (dbObject:SQLite.WebSQLDatabase) => {
 
 export const getFlashcards = (dbObject:SQLite.WebSQLDatabase, id:number, categoryId:number, callback:Function) => {
     dbObject.transaction((tx) => {
-        tx.executeSql(`SELECT flashcards.remote_id, flashcards.german, flashcards.german_article, flashcards.english, flashcards.polish, flashcard_progress.remembered FROM flashcards INNER JOIN flashcard_progress ON flashcards.remote_id = flashcard_progress.remote_id WHERE flashcard_progress.remembered < 2 AND flashcard_levels_id = ? AND flashcard_progress.level_type = ? LIMIT 20`, [id, categoryId], (tx, results) => {
+        tx.executeSql(`SELECT flashcards.remote_id, flashcards.german, flashcards.german_article, flashcards.english, flashcards.polish, flashcards.image, flashcard_progress.remembered FROM flashcards INNER JOIN flashcard_progress ON flashcards.remote_id = flashcard_progress.remote_id WHERE flashcard_progress.remembered < 2 AND flashcard_levels_id = ? AND flashcard_progress.level_type = ? LIMIT 20`, [id, categoryId], (tx, results) => {
             typeof callback === 'function' && callback(results);
         });
     });
@@ -78,7 +78,7 @@ export const updateDataFlashcardsNew = (dbObject:SQLite.WebSQLDatabase, table:st
     dbObject.transaction((tx) => {
        dataObject.forEach(data => {
             tx.executeSql(`INSERT OR IGNORE INTO flashcards(flashcard_levels_id, remote_id, german, german_article, english, polish, image) values (?, ?, ?, ?, ?, ?, ?)`, 
-            [data.flashcard_levels_id, data.id, data.german, data.german_article, data.english, data.polish, ''],
+            [data.flashcard_levels_id, data.id, data.german, data.german_article, data.english, data.polish, data.image],
             (t, err) => {
                 console.log(err)
             }
@@ -155,7 +155,7 @@ export const showProgress = (dbObject:SQLite.WebSQLDatabase) => {
 export const showTables = (dbObject:SQLite.WebSQLDatabase) => {
     dbObject.transaction((tx) => {
         tx.executeSql(
-            `SELECT flashcards.german, flashcards.german_article, flashcards.english, flashcards.polish, flashcard_progress.remembered, flashcard_progress.level_type FROM flashcards INNER JOIN flashcard_progress ON flashcards.remote_id = flashcard_progress.remote_id`,
+            `SELECT flashcards.german, flashcards.german_article, flashcards.english, flashcards.polish, flashcards.image, flashcard_progress.remembered, flashcard_progress.level_type FROM flashcards INNER JOIN flashcard_progress ON flashcards.remote_id = flashcard_progress.remote_id`,
              [], (tx, result) => {
             console.log(result.rows._array)
         }, (t, err) => {

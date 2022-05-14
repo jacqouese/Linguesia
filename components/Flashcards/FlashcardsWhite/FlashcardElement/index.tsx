@@ -7,6 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import styles from './styles';
 import { getFlashcards, updateFlashcardRemembered } from '../../../../adapters/sql'
 import { FlashcardStateProps } from '../../../../types';
+import baseURL from '../../../../api/baseURL';
 
 export type FlashcardElementProps = {
     setProgressValue: Function,
@@ -31,13 +32,15 @@ const FlashcardElement = ({setProgressValue, setLearning, id, mainId}:FlashcardE
         // get flashcards from sqlite and add to state
         getFlashcards(db, id, mainId, (res:any) => {
             res.rows._array.map((item:any) => {
+                console.log(item)
                 setCurrentFlashcard(currentFlashcard => [...currentFlashcard, {
                     id: currentFlashcard.length,
                     remote_id: item.remote_id,
                     word: `${item.german_article} ${item.german}`,
                     article: item.german_article,
                     translation: item.polish,
-                    remembered: item.remembered
+                    remembered: item.remembered,
+                    image: item.image
                     }])
             })
         
@@ -58,7 +61,9 @@ const FlashcardElement = ({setProgressValue, setLearning, id, mainId}:FlashcardE
                         </Animated.View>
                         <Animated.View style={[styles.translation, {width: '100%', height: '100%', opacity: cardTextOpacityTranslation, zIndex: 1, transform:[{scaleX: -1}]}]}>
                         <Image 
-                            source={require('../../../../assets/images/lamp.png')}
+                            source={{
+                                uri: baseURL+'images/'+item.image,
+                              }}
                             style={{
                             width: 120, 
                             height: 120,
