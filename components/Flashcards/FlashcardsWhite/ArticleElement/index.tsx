@@ -43,7 +43,8 @@ const ArticleElement = ({setProgressValue, setLearning, id, mainId}:ArticleEleme
                     word: item.german,
                     article: item.german_article,
                     translation: item.polish,
-                    remembered: item.remembered
+                    remembered: item.remembered,
+                    image: item.image
                     }])
             })
         
@@ -117,7 +118,7 @@ const ArticleElement = ({setProgressValue, setLearning, id, mainId}:ArticleEleme
                     <View style={styles.articleCardContainer}>
                         <Image 
                             source={{
-                                uri: baseURL+'images/fruits.png',
+                                uri: baseURL+'images/'+item.image,
                             }}
                             style={{
                                 width: 120, 
