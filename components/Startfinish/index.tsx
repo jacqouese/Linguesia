@@ -93,11 +93,11 @@ const Subcategory = () => {
         setProgressValue(-320 + (learnt * 0.85 + learning * 0.3) * (320/(toLearn+learning+learnt-1))); 
     }, [learning, learnt]);
 
-    const startLevel = (isArticleCard:boolean) => {
+    const startLevel = (typeOfLevel:number) => {
          // check if there are any more flashcards to learn
-         if (toLearn != 0 || learning != 0) {
+        if (toLearn != 0 || learning != 0) {
             // navigate to flashcards
-            navigation.navigate('Flashcards', {main: main, sub: sub, isArticleCard: isArticleCard});
+            navigation.navigate('Flashcards', {main: main, sub: sub, typeOfLevel: typeOfLevel});
         }
         else {
             // ask user if they wanna reset their progress
@@ -123,14 +123,7 @@ const Subcategory = () => {
     }
 
     const onStart = () => {
-        console.log(main.id)
-        if (main.id == 1 || main.id == 3) {
-            startLevel(false);
-        }
-        else if (main.id == 2) {
-            startLevel(true);
-        }
-    
+        startLevel(main.id);
     }
 
     const image = baseURL+`images/fruits.png`;

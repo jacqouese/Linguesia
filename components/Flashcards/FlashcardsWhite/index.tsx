@@ -8,14 +8,15 @@ import FlashcardElement from './FlashcardElement';
 import ProgressBar from './ProgressBar';
 import styles from './styles';
 import ArticleElement from './ArticleElement';
+import WriteFlashcardElement from './WriteFlashcardElement';
 
 export type FlashcardWhiteProps = {
     id: number
     mainId: number
-    isArticleCard?: boolean
+    typeOfLevel?: number
 }
 
-const FlashcardWhite = ({id, mainId, isArticleCard = false}:FlashcardWhiteProps) => {
+const FlashcardWhite = ({id, mainId, typeOfLevel = 1}:FlashcardWhiteProps) => {
     const [progressValue, setProgressValue] = useState(-280);
     const [toLearn, setToLearn] = useState(0);
     const [learning, setLearning] = useState(0);
@@ -37,6 +38,18 @@ const FlashcardWhite = ({id, mainId, isArticleCard = false}:FlashcardWhiteProps)
         });
     });
 
+    const renderCorrectFlashcard = () => {
+        if (typeOfLevel == 1) {
+            return <FlashcardElement setProgressValue={setProgressValue} setLearning={setLearning} id={id} mainId={mainId} />
+        }
+        else if (typeOfLevel == 2) {
+            return <ArticleElement setProgressValue={setProgressValue} setLearning={setLearning} id={id} mainId={mainId} />
+        }
+        else if (typeOfLevel == 3) {
+            return <WriteFlashcardElement />
+        }
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.counterContainer}>
@@ -50,13 +63,7 @@ const FlashcardWhite = ({id, mainId, isArticleCard = false}:FlashcardWhiteProps)
                     <Counter title={'Nauczone'} fontColor={Colors.theme.text} counter={learnt}/>
                 </View>
             </View>
-            {isArticleCard ? 
-                (
-                    <ArticleElement setProgressValue={setProgressValue} setLearning={setLearning} id={id} mainId={mainId} />
-                ) : (
-                    <FlashcardElement setProgressValue={setProgressValue} setLearning={setLearning} id={id} mainId={mainId} />
-                )}
-            
+            {renderCorrectFlashcard()}
             <ProgressBar progressValue={progressValue} color={Colors.theme.cardColor} absolute={true}/>
         </View>
     )
