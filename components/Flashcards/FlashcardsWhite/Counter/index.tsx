@@ -7,7 +7,7 @@ import styles from './styles';
 export type CounterProps = {
     title: string,
     counter: number,
-    fontColor: string
+    fontColor?: string
 }
 
 const Counter = ({ title, counter, fontColor = 'white' } :CounterProps) => {

@@ -154,7 +154,7 @@ const Subcategory = () => {
             </View>
         )
     }
-    console.log(main.color)
+
     return (
         <View style={[styles.container, , {backgroundColor: background}]}>
             <TouchableOpacity
