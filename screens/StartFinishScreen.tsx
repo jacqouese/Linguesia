@@ -5,17 +5,17 @@ import { Text, View } from '../components/Themed';
 import StartFinish from '../components/Startfinish';
 
 export default function FlashcardsScreen() {
-  return (
-    <View style={styles.container}>
-      <StartFinish />
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            <StartFinish />
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });
