@@ -9,16 +9,14 @@ import CategoryElement from './CategoryElement';
 import styles from './styles';
 
 export type CategoriesProps = {
-    category: CategoryType,
-}
+    category: CategoryType;
+};
 
 const displayCategories = () => {
     return categories.map((item) => {
-        return(
-            <CategoryElement key={item.id} category={item} />
-        )
-    })
-}
+        return <CategoryElement key={item.id} category={item} />;
+    });
+};
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -28,7 +26,7 @@ const Categories = ({ category }: CategoriesProps) => {
             <Text style={styles.title}>Kategorie</Text>
             {displayCategories()}
         </View>
-    )
-}
+    );
+};
 
 export default Categories;

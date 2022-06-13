@@ -1,33 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, Alert, FlatList } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import * as SQLite from 'expo-sqlite';
-import styles from './styles';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
     useIsFocused,
     useNavigation,
     useRoute,
 } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import Colors, { isDark } from '../../constants/Colors';
-import SubcategoryElement from '../Subcategory/Main/SubcategoryElement';
-import ProgressBar from '../Flashcards/FlashcardsWhite/ProgressBar';
-import Counter from '../Flashcards/FlashcardsWhite/Counter';
+import ProgressBar from '../../components/Flashcards/FlashcardsWhite/ProgressBar';
+import Counter from '../../components/Flashcards/FlashcardsWhite/Counter';
+import SubcategoryElement from '../../components/Subcategory/Main/SubcategoryElement';
+
 import {
     numOfRemembered,
     prepareNewLevelProgress,
     resetLevelProgress,
 } from '../../adapters/sql';
 import baseURL from '../../api/baseURL';
+import Colors, { isDark } from '../../constants/Colors';
+import styles from './styles';
+import List from '../../components/StartFinish/List';
 
-export type wordListElementProps = {
-    word: string;
-    translation: string;
-    img?: string;
-};
-
-const Subcategory = () => {
+export default function FlashcardsScreen() {
     const [toLearn, setToLearn] = useState(-1);
     const [learning, setLearning] = useState(0);
     const [learnt, setLearnt] = useState(0);
@@ -48,15 +44,6 @@ const Subcategory = () => {
     };
 
     const db = SQLite.openDatabase('linguesia.db');
-
-    const data = [
-        { id: 1, word: 'der Apfel', translation: 'apple' },
-        { id: 2, word: 'die Birne', translation: 'pear' },
-        { id: 3, word: 'die Karrote', translation: 'carrot' },
-        { id: 4, word: 'der Apfel', translation: 'apple' },
-        { id: 5, word: 'die Birne', translation: 'pear' },
-        { id: 6, word: 'die Karrote', translation: 'carrot' },
-    ];
 
     const updateCounters = () => {
         return new Promise((resolve) => {
@@ -149,28 +136,8 @@ const Subcategory = () => {
         startLevel(main.id);
     };
 
-    const image = baseURL + `images/fruits.png`;
-
     const background = isDark ? Colors.theme.background : main.color.main;
     const text = isDark ? main.color.main : Colors.dark.text;
-
-    const wordListElement: any = (data: wordListElementProps) => {
-        return (
-            <View style={styles.wordListElement}>
-                <Image
-                    source={{ uri: image }}
-                    style={{
-                        width: 35,
-                        height: 35,
-                    }}
-                />
-                <Text style={styles.wordListElementText}>{data.word}</Text>
-                <Text style={styles.wordListElementText}>
-                    {data.translation}
-                </Text>
-            </View>
-        );
-    };
 
     return (
         <View style={[styles.container, , { backgroundColor: background }]}>
@@ -218,16 +185,7 @@ const Subcategory = () => {
                     progressValue={progressValue}
                     color={main.color.main}
                 />
-                <View style={styles.wordListContainer}>
-                    <FlatList
-                        style={styles.wordListFlatList}
-                        scrollEventThrottle={16}
-                        data={data}
-                        renderItem={({ item }) => wordListElement(item)}
-                        keyExtractor={(item) => item.id}
-                        showsVerticalScrollIndicator={false}
-                    />
-                </View>
+                <List mainId={main.id} subId={sub.id} />
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={styles.button}
@@ -244,6 +202,4 @@ const Subcategory = () => {
             </View>
         </View>
     );
-};
-
-export default Subcategory;
+}

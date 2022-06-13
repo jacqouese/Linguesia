@@ -40,29 +40,6 @@ const styles = StyleSheet.create ({
         height: 95,
         borderRadius: 30,
     },
-    wordListContainer: {
-        alignItems: 'center',
-        paddingHorizontal: 10,
-        paddingVertical: 20,
-    },
-    wordListFlatList: {
-        height: height/3,
-        width: width-50,
-    },
-    wordListElement: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        height: 60,
-        marginBottom: 10,
-        paddingHorizontal: 40,
-        borderRadius: 20,
-        backgroundColor: Colors.theme.accent
-    },
-    wordListElementText: {
-        color: Colors.theme.text,
-        fontSize: 20
-    },
     button: {
         width: '100%',
         height: '100%',

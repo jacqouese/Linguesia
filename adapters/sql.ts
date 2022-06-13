@@ -15,7 +15,7 @@ export const dropAllTables = () => {
 export const initializeTables = () => {
     dbObj.transaction((tx) => {
         tx.executeSql(
-            'CREATE TABLE "flashcard_levels" ( "id"	INTEGER NOT NULL, "title_english"	TEXT, "subtitle_english"	TEXT, "title_polish"	TEXT, "subtitle_polish"	TEXT, "image"	TEXT, "remote_id"	INTEGER UNIQUE, PRIMARY KEY("id" AUTOINCREMENT) )',
+            'CREATE TABLE IF NOT EXISTS "flashcard_levels" ( "id"	INTEGER NOT NULL, "title_english"	TEXT, "subtitle_english"	TEXT, "title_polish"	TEXT, "subtitle_polish"	TEXT, "image"	TEXT, "remote_id"	INTEGER UNIQUE, PRIMARY KEY("id" AUTOINCREMENT) )',
             [],
             (tx, result) => {
                 console.log(result);
@@ -25,13 +25,13 @@ export const initializeTables = () => {
             }
         );
         tx.executeSql(
-            'CREATE TABLE "flashcards" ( "id"	INTEGER NOT NULL, "flashcard_levels_id"	INTEGER, "remote_id"	INTEGER UNIQUE, "german"	TEXT, "german_article"	TEXT, "polish"	TEXT, "english"	TEXT, "image"	TEXT, PRIMARY KEY("id" AUTOINCREMENT), FOREIGN KEY("flashcard_levels_id") REFERENCES "flashcard_levels"("id") )'
+            'CREATE TABLE IF NOT EXISTS "flashcards" ( "id"	INTEGER NOT NULL, "flashcard_levels_id"	INTEGER, "remote_id"	INTEGER UNIQUE, "german"	TEXT, "german_article"	TEXT, "polish"	TEXT, "english"	TEXT, "image"	TEXT, PRIMARY KEY("id" AUTOINCREMENT), FOREIGN KEY("flashcard_levels_id") REFERENCES "flashcard_levels"("id") )'
         );
         tx.executeSql(
-            'CREATE TABLE "flashcard_progress" ( "id"	INTEGER NOT NULL, "remote_id"	INTEGER, "remembered"	INTEGER DEFAULT 0, "level_type"	INTEGER, PRIMARY KEY("id" AUTOINCREMENT), FOREIGN KEY("remote_id") REFERENCES "flashcards"("remote_id") ON DELETE CASCADE )'
+            'CREATE TABLE IF NOT EXISTS "flashcard_progress" ( "id"	INTEGER NOT NULL, "remote_id"	INTEGER, "remembered"	INTEGER DEFAULT 0, "level_type"	INTEGER, PRIMARY KEY("id" AUTOINCREMENT), FOREIGN KEY("remote_id") REFERENCES "flashcards"("remote_id") ON DELETE CASCADE )'
         );
         tx.executeSql(
-            'CREATE TABLE "flashcard_category" ( "id"	INTEGER NOT NULL, "main_id"	INTEGER, "flashcard_levels_id"	INTEGER, "remote_id"	INTEGER UNIQUE, FOREIGN KEY("flashcard_levels_id") REFERENCES "flashcard_levels"("id") ON DELETE CASCADE, PRIMARY KEY("id") )'
+            'CREATE TABLE IF NOT EXISTS "flashcard_category" ( "id"	INTEGER NOT NULL, "main_id"	INTEGER, "flashcard_levels_id"	INTEGER, "remote_id"	INTEGER UNIQUE, FOREIGN KEY("flashcard_levels_id") REFERENCES "flashcard_levels"("id") ON DELETE CASCADE, PRIMARY KEY("id") )'
         );
     });
 }
@@ -73,7 +73,7 @@ export const resetLevelProgress = (dbObject:SQLite.WebSQLDatabase) => {
 }
 
 export const getFlashcards = (dbObject:SQLite.WebSQLDatabase, id:number, categoryId:number, callback:Function) => {
-    dbObject.transaction((tx) => {
+    dbObj.transaction((tx) => {
         tx.executeSql(`SELECT flashcards.remote_id, flashcards.german, flashcards.german_article, flashcards.english, flashcards.polish, flashcards.image, flashcard_progress.remembered FROM flashcards INNER JOIN flashcard_progress ON flashcards.remote_id = flashcard_progress.remote_id WHERE flashcard_progress.remembered < 2 AND flashcard_levels_id = ? AND flashcard_progress.level_type = ? LIMIT 20`, [id, categoryId], (tx, results) => {
             typeof callback === 'function' && callback(results);
         });

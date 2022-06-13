@@ -17,6 +17,7 @@ import {
     updateDataFlashcardsNew,
 } from '../adapters/sql';
 import baseURL from '../api/baseURL';
+import { getCategories } from '../api/api';
 
 export default function SettingsScreen() {
     const timestampSql = () => {
@@ -51,11 +52,15 @@ export default function SettingsScreen() {
         );
     };
 
-    const updateFlashcardCategory = () => {
-        axios.get(baseURL + `api/category`).then((res) => {
-            updateDataFlashcardCategory(dbNew, '2021', res.data);
-        });
-    };
+    // const updateFlashcardCategory = () => {
+    //     getCategories()
+    //         .then((res) => {
+    //             updateDataFlashcardCategory(dbNew, '2021', res.data);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // };
 
     return (
         <View style={styles.container}>
