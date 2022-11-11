@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, Alert, FlatList } from 'react-native';
 import * as SQLite from 'expo-sqlite';
-import {
-    useIsFocused,
-    useNavigation,
-    useRoute,
-} from '@react-navigation/native';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -13,11 +9,7 @@ import ProgressBar from '../../components/Flashcards/FlashcardsWhite/ProgressBar
 import Counter from '../../components/Flashcards/FlashcardsWhite/Counter';
 import SubcategoryElement from '../../components/Subcategory/Main/SubcategoryElement';
 
-import {
-    numOfRemembered,
-    prepareNewLevelProgress,
-    resetLevelProgress,
-} from '../../adapters/sql';
+import { numOfRemembered, prepareNewLevelProgress, resetLevelProgress } from '../../adapters/sql';
 import baseURL from '../../api/baseURL';
 import Colors, { isDark } from '../../constants/Colors';
 import styles from './styles';
@@ -93,11 +85,7 @@ export default function FlashcardsScreen() {
     }, [isFocused]);
 
     useEffect(() => {
-        setProgressValue(
-            -320 +
-                (learnt * 0.85 + learning * 0.3) *
-                    (320 / (toLearn + learning + learnt - 1))
-        );
+        setProgressValue(-320 + (learnt * 0.85 + learning * 0.3) * (320 / (toLearn + learning + learnt - 1)));
     }, [learning, learnt]);
 
     const startLevel = (typeOfLevel: number) => {
@@ -141,61 +129,29 @@ export default function FlashcardsScreen() {
 
     return (
         <View style={[styles.container, , { backgroundColor: background }]}>
-            <TouchableOpacity
-                onPress={onPress}
-                activeOpacity={0.8}
-                style={{ marginLeft: 5 }}
-            >
+            <TouchableOpacity onPress={onPress} activeOpacity={0.8} style={{ marginLeft: 5 }}>
                 <Ionicons name="chevron-back" size={40} color="white" />
             </TouchableOpacity>
             <View style={styles.main}>
-                <SubcategoryElement
-                    category={sub}
-                    color={main}
-                    animate={false}
-                />
+                <SubcategoryElement category={sub} color={main} animate={false} />
 
                 <View style={styles.counterContainer}>
-                    <View
-                        style={[
-                            styles.counterBackground,
-                            { backgroundColor: main.color.accent },
-                        ]}
-                    >
+                    <View style={[styles.counterBackground, { backgroundColor: main.color.accent }]}>
                         <Counter title={'Do nauczenia'} counter={toLearn} />
                     </View>
-                    <View
-                        style={[
-                            styles.counterBackground,
-                            { backgroundColor: main.color.accent },
-                        ]}
-                    >
+                    <View style={[styles.counterBackground, { backgroundColor: main.color.accent }]}>
                         <Counter title={'Ćwiczone'} counter={learning} />
                     </View>
-                    <View
-                        style={[
-                            styles.counterBackground,
-                            { backgroundColor: main.color.accent },
-                        ]}
-                    >
+                    <View style={[styles.counterBackground, { backgroundColor: main.color.accent }]}>
                         <Counter title={'Nauczone'} counter={learnt} />
                     </View>
                 </View>
-                <ProgressBar
-                    progressValue={progressValue}
-                    color={main.color.main}
-                />
+                <ProgressBar progressValue={progressValue} color={main.color.main} />
                 <List mainId={main.id} subId={sub.id} />
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        style={styles.button}
-                        activeOpacity={0.8}
-                        onPress={onStart}
-                    >
+                    <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={onStart}>
                         <Text style={[styles.text, { color: main.color.main }]}>
-                            {learning == 0 && learning == 0
-                                ? 'Rozpocznij'
-                                : 'Kontynuuj'}
+                            {learning == 0 && learning == 0 ? 'Rozpocznij' : 'Kontynuuj'}
                         </Text>
                     </TouchableOpacity>
                 </View>

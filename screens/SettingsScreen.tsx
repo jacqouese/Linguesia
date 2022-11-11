@@ -66,29 +66,13 @@ export default function SettingsScreen() {
         <View style={styles.container}>
             <Button onPress={onNewDb} title="Load DB to storage" color="#FFF" />
             <Text>------------</Text>
-            <Button
-                onPress={onQuery}
-                title="query server and insert new data"
-                color="#FFF"
-            />
+            <Button onPress={onQuery} title="query server and insert new data" color="#FFF" />
             <Text>------------</Text>
-            <Button
-                onPress={() => showTables(dbNew)}
-                title="console.log flashcards"
-                color="#FFF"
-            />
+            <Button onPress={() => showTables(dbNew)} title="console.log flashcards" color="#FFF" />
             <Text>------------</Text>
-            <Button
-                onPress={() => showFlashcards(dbNew)}
-                title="console.log flashcard_levels"
-                color="#FFF"
-            />
+            <Button onPress={() => showFlashcards(dbNew)} title="console.log flashcard_levels" color="#FFF" />
             <Text>------------</Text>
-            <Button
-                onPress={() => showProgress(dbNew)}
-                title="console.log flashcard_progress"
-                color="#FFF"
-            />
+            <Button onPress={() => showProgress(dbNew)} title="console.log flashcard_progress" color="#FFF" />
             <Text>------------</Text>
             <Button
                 onPress={() => prepareNewLevelProgress(dbNew, '2021', 1, 1)}
@@ -96,11 +80,7 @@ export default function SettingsScreen() {
                 color="#FFF"
             />
             <Text>------------</Text>
-            <Button
-                onPress={() => updateFlashcardCategory(dbNew)}
-                title="update flashcardCategory"
-                color="#FFF"
-            />
+            <Button onPress={() => updateFlashcardCategory(dbNew)} title="update flashcardCategory" color="#FFF" />
             <Text>------------</Text>
             <Button
                 onPress={() => logFlashcardsRemeberedJoin(dbNew, 1, 2)}
