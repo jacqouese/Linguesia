@@ -6,6 +6,7 @@ import { Asset } from 'expo-asset';
 import axios from 'axios';
 import { Text, View } from '../components/Themed';
 import {
+    dropAllTables,
     initializeTables,
     logFlashcardsRemeberedJoin,
     prepareNewLevelProgress,
@@ -43,6 +44,7 @@ export default function SettingsScreen() {
 
                     axios.get(baseURL + `api/category`).then((res) => {
                         updateDataFlashcardCategory(dbNew, '2021', res.data);
+                        console.log('done');
                     });
                 });
             },
@@ -64,7 +66,7 @@ export default function SettingsScreen() {
 
     return (
         <View style={styles.container}>
-            <Button onPress={onNewDb} title="Load DB to storage" color="#FFF" />
+            <Button onPress={onNewDb} title="Prepare tables (first launch)" color="#FFF" />
             <Text>------------</Text>
             <Button onPress={onQuery} title="query server and insert new data" color="#FFF" />
             <Text>------------</Text>
@@ -80,7 +82,7 @@ export default function SettingsScreen() {
                 color="#FFF"
             />
             <Text>------------</Text>
-            <Button onPress={() => updateFlashcardCategory(dbNew)} title="update flashcardCategory" color="#FFF" />
+            <Button onPress={() => dropAllTables()} title="Drop all tables" color="#FFF" />
             <Text>------------</Text>
             <Button
                 onPress={() => logFlashcardsRemeberedJoin(dbNew, 1, 2)}

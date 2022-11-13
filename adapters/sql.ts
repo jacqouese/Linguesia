@@ -5,10 +5,37 @@ const dbObj = SQLite.openDatabase('linguesia.db');
 export const dropAllTables = () => {
     dbObj.transaction((tx) => {
         tx.executeSql(
-            `delete from sqlite_master where type in ('table', 'index', 'trigger')`,
+            `drop table  flashcard_levels`,
             [],
             (tx, result) => {
-                console.log(result);
+                tx.executeSql(
+                    `drop table flashcards`,
+                    [],
+                    (tx, result) => {
+                        tx.executeSql(
+                            `drop table  flashcard_progress`,
+                            [],
+                            (tx, result) => {
+                                tx.executeSql(
+                                    `drop table  flashcard_category`,
+                                    [],
+                                    (tx, result) => {
+                                        console.log(result);
+                                    },
+                                    (tx, err) => {
+                                        console.log(err);
+                                    }
+                                );
+                            },
+                            (tx, err) => {
+                                console.log(err);
+                            }
+                        );
+                    },
+                    (tx, err) => {
+                        console.log(err);
+                    }
+                );
             },
             (tx, err) => {
                 console.log(err);
@@ -30,7 +57,7 @@ export const initializeTables = () => {
             }
         );
         tx.executeSql(
-            'CREATE TABLE IF NOT EXISTS "flashcards" ( "id"	INTEGER NOT NULL, "flashcard_levels_id"	INTEGER, "remote_id"	INTEGER UNIQUE, "german"	TEXT, "german_article"	TEXT, "polish"	TEXT, "english"	TEXT, "image"	TEXT, PRIMARY KEY("id" AUTOINCREMENT), FOREIGN KEY("flashcard_levels_id") REFERENCES "flashcard_levels"("id") )'
+            'CREATE TABLE IF NOT EXISTS "flashcards" ( "id"	INTEGER NOT NULL, "flashcard_levels_id"	INTEGER, "remote_id"	INTEGER UNIQUE, "german"	TEXT, "german_article"	TEXT, "polish"	TEXT, "english"	TEXT, "image"	TEXT, "is_verb" INTERGER, PRIMARY KEY("id" AUTOINCREMENT), FOREIGN KEY("flashcard_levels_id") REFERENCES "flashcard_levels"("id") )'
         );
         tx.executeSql(
             'CREATE TABLE IF NOT EXISTS "flashcard_progress" ( "id"	INTEGER NOT NULL, "remote_id"	INTEGER, "remembered"	INTEGER DEFAULT 0, "level_type"	INTEGER, PRIMARY KEY("id" AUTOINCREMENT), FOREIGN KEY("remote_id") REFERENCES "flashcards"("remote_id") ON DELETE CASCADE )'
@@ -165,8 +192,9 @@ export const updateDataFlashcardsNew = (
 ) => {
     dbObject.transaction((tx) => {
         dataObject.forEach((data) => {
+            console.log(data);
             tx.executeSql(
-                `INSERT OR IGNORE INTO flashcards(flashcard_levels_id, remote_id, german, german_article, english, polish, image) values (?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT OR IGNORE INTO flashcards(flashcard_levels_id, remote_id, german, german_article, english, polish, image, is_verb) values (?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     data.flashcard_levels_id,
                     data.id,
@@ -175,7 +203,16 @@ export const updateDataFlashcardsNew = (
                     data.english,
                     data.polish,
                     data.image,
+                    data.is_verb,
                 ],
+                (tx, result) => {
+                    // prepare progress table
+                    tx.executeSql(
+                        `INSERT OR IGNORE INTO flashcard_progress(remote_id, level_type) values (?, ?)`,
+                        [data.id, 0],
+                        () => console.log('success')
+                    );
+                },
                 (t, err) => {
                     console.log(err);
                 }
@@ -192,8 +229,16 @@ export const updateDataFlashcardLevels = (
     dbObject.transaction((tx) => {
         dataObject.forEach((data) => {
             tx.executeSql(
-                `INSERT OR IGNORE INTO flashcard_levels(remote_id, title_english, subtitle_english, title_polish, subtitle_polish, image) values (?, ?, ?, ?, ?, ?)`,
-                [data.id, data.title, data.subtitle_english, data.title_polish, data.subtitle_polish, data.image]
+                `INSERT OR IGNORE INTO flashcard_levels(remote_id, title_english, subtitle_english, title_polish, subtitle_polish, image, is_verb) values (?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    data.id,
+                    data.title,
+                    data.subtitle_english,
+                    data.title_polish,
+                    data.subtitle_polish,
+                    data.image,
+                    data.is_verb,
+                ]
             );
         });
     });

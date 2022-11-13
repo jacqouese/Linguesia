@@ -6,7 +6,7 @@ export class SqlModel {
     dbName: string;
 
     constructor() {
-        this.dbName = 'bookapp';
+        this.dbName = 'linguesia.db';
         this.db = SQLite.openDatabase(this.dbName);
     }
 
@@ -41,7 +41,7 @@ export class SqlModel {
             "subtitle_polish" TEXT, 
             "image"	TEXT, 
             "remote_id"	INTEGER UNIQUE, 
-            "is_verb", 
+            "is_verb" INTERGER, 
             PRIMARY KEY("id" AUTOINCREMENT) 
         )`
         );
