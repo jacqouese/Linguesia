@@ -267,16 +267,20 @@ export const prepareNewLevelProgress = (
     categoryId: number
 ) => {
     dbObject.transaction((tx) => {
+        const isVerb = categoryId === 3 ? 1 : 0;
         tx.executeSql(
-            `SELECT flashcards.remote_id, flashcard_category.main_id FROM flashcards INNER JOIN flashcard_category ON flashcards.flashcard_levels_id = flashcard_category.flashcard_levels_id WHERE flashcard_category.flashcard_levels_id = ? and flashcard_category.main_id = ?`,
-            [levelId, categoryId],
+            `SELECT flashcards.remote_id FROM flashcards INNER JOIN flashcard_levels ON flashcards.flashcard_levels_id = flashcard_levels.remote_id WHERE flashcard_levels.remote_id = ?`,
+            [levelId],
             (tx, result) => {
+                console.log(result.rows._array);
                 result.rows._array.forEach((elem) => {
-                    console.log(elem);
                     tx.executeSql(
                         `INSERT OR IGNORE INTO flashcard_progress(remote_id, level_type) values (?, ?)`,
-                        [elem.remote_id, elem.main_id],
-                        () => console.log('success')
+                        [elem.remote_id, categoryId],
+                        () => {},
+                        (t, err) => {
+                            console.log(err);
+                        }
                     );
                 });
             },

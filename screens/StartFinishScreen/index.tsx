@@ -39,17 +39,17 @@ export default function FlashcardsScreen() {
 
     const updateCounters = () => {
         return new Promise((resolve) => {
-            numOfRemembered(db, 0, sub.id, main.id).then(
+            numOfRemembered(db, 0, sub.remote_id, main.id).then(
                 (res) => {
                     const first = res;
                     setToLearn(res);
 
-                    numOfRemembered(db, 1, sub.id, main.id).then(
+                    numOfRemembered(db, 1, sub.remote_id, main.id).then(
                         (res) => {
                             const second = res;
                             setLearning(res);
 
-                            numOfRemembered(db, 2, sub.id, main.id).then(
+                            numOfRemembered(db, 2, sub.remote_id, main.id).then(
                                 (res) => {
                                     const third = res;
                                     setLearnt(res);
@@ -73,12 +73,14 @@ export default function FlashcardsScreen() {
     };
 
     useEffect(() => {
+        console.log(`main: ${main.id}, sub: ${sub.remote_id}`);
+        console.log(sub);
         updateCounters().then(({ first, second, third }) => {
             if (first == 0 && second == 0 && third == 0) {
                 // level launched first time
                 console.log('level launched first time');
 
-                prepareNewLevelProgress(db, '2022', sub.id, main.id);
+                prepareNewLevelProgress(db, '2022', sub.remote_id, main.id);
                 updateCounters();
             }
         });
@@ -147,7 +149,7 @@ export default function FlashcardsScreen() {
                     </View>
                 </View>
                 <ProgressBar progressValue={progressValue} color={main.color.main} />
-                <List mainId={main.id} subId={sub.id} />
+                <List mainId={main.id} subId={sub.remote_id} />
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={onStart}>
                         <Text style={[styles.text, { color: main.color.main }]}>
